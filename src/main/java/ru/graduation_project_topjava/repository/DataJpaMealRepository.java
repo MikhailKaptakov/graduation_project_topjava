@@ -28,7 +28,7 @@ public class DataJpaMealRepository {
         if (restaurant == null) {
             return null;
         }
-        meal.setOwnerRestaurant(restaurant);
+        meal.setRestaurant(restaurant);
         return mealRepository.save(meal);
     }
 
@@ -39,14 +39,14 @@ public class DataJpaMealRepository {
             return null;
         }
         List<Meal> mealsWithRestaurantId  = meals.stream()
-                .peek(meal -> {meal.setOwnerRestaurant(restaurant);})
+                .peek(meal -> {meal.setRestaurant(restaurant);})
                 .toList();
         return mealRepository.saveAll(mealsWithRestaurantId);
     }
 
     public Meal get(long id, long restaurantId) {
         return mealRepository.findById(id)
-                .filter(meal -> meal.getOwnerRestaurant().getId() == restaurantId)
+                .filter(meal -> meal.getRestaurant().getId() == restaurantId)
                 .orElse(null);
     }
 

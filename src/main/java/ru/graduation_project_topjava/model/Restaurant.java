@@ -1,8 +1,6 @@
 package ru.graduation_project_topjava.model;
 
 
-import org.hibernate.validator.constraints.Range;
-
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
@@ -17,7 +15,7 @@ public class Restaurant extends AbstractBaseNamedEntity{
     @NotNull
     private LocalDate lastUpdateDate;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "ownerRestaurant")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "restaurant")
     @OrderBy("name DESC")
     private List<Meal> meals;
 

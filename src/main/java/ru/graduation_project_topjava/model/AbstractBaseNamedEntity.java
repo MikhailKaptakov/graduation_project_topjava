@@ -9,7 +9,7 @@ import java.time.LocalDate;
 @MappedSuperclass
 public abstract class AbstractBaseNamedEntity extends AbstractBaseEntity {
 
-    protected static final LocalDate MIN = LocalDate.of(1,1,1);
+    public static final LocalDate MIN = LocalDate.of(1,1,1);
 
     @NotBlank (message = "Name is mandatory")
     @Size(min = 2, max = 128)

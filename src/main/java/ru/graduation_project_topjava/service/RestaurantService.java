@@ -1,20 +1,17 @@
 package ru.graduation_project_topjava.service;
 
+import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import ru.graduation_project_topjava.model.Meal;
 import ru.graduation_project_topjava.model.Restaurant;
 import ru.graduation_project_topjava.repository.DataJpaMealRepository;
 import ru.graduation_project_topjava.repository.DataJpaRestaurantRepository;
-import ru.graduation_project_topjava.to.MealTo;
-import ru.graduation_project_topjava.to.RestaurantTo;
-import ru.graduation_project_topjava.util.MealUtil;
-import ru.graduation_project_topjava.util.RestaurantUtil;
-import ru.graduation_project_topjava.util.ValidationUtil;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Service
 public class RestaurantService {
 
     private final DataJpaRestaurantRepository restaurantRepository;
@@ -31,44 +28,42 @@ public class RestaurantService {
         return restaurantRepository.getNotActualRestaurants();
     }
 
-    public List<RestaurantTo> getActualRestaurants() {
-        return RestaurantUtil.createActualRestaurantTosList(restaurantRepository.getAllActualRestaurants());
+    public List<Restaurant> getActualRestaurants() {
+        return restaurantRepository.getAllActualRestaurants();
     }
 
-    public Restaurant createRestaurantWithMenu(RestaurantTo restaurantTo) {
-        Assert.notNull(restaurantTo, "Restaurant must not be null");
-        List<MealTo> mealTos = restaurantTo.getMealTos();
-        Assert.notNull(mealTos, "Meals menu must not be null");
-        checkMealTosList(mealTos);
-        Restaurant restaurant = restaurantTo.createNewRestaurant();
+    public Restaurant createRestaurantWithMenu(Restaurant restaurant) {
+        Assert.notNull(restaurant, "Restaurant must not be null");
+        List<Meal> meals = restaurant.getMeals();
+        Assert.notNull(meals, "Meals menu must not be null");
+        checkMealTosList(meals);
         return restaurantRepository.save(restaurant);
     }
 
-    public void addRestaurantMenu(List<MealTo> mealTos, long  restaurantId) {
-        Assert.notNull(mealTos, "Meals menu must not be null");
-        checkMealTosList(mealTos);
-        List<Meal> meals = MealUtil.createMealList(mealTos);
+    public void addRestaurantMenu(List<Meal> meals, long  restaurantId) {
+        Assert.notNull(meals, "Meals menu must not be null");
+        checkMealTosList(meals);
         mealRepository.saveAll(meals, restaurantId);
     }
 
-    private void checkMealTosList(List<MealTo> mealTos) {
-        checkMealTosToEmptyList(mealTos);
-        checkMealTosListToDuplicate(mealTos);
+    private void checkMealTosList(List<Meal> meals) {
+        checkMealEmptyList(meals);
+        checkMealListToDuplicate(meals);
     }
 
-    private void checkMealTosToEmptyList(List<MealTo> mealTos) {
-        if (mealTos.size() == 0) {
+    private void checkMealEmptyList(List<Meal> meals) {
+        if (meals.size() == 0) {
             throw new IllegalArgumentException("Meal list is empty");
         }
     }
 
-    private void checkMealTosListToDuplicate(List<MealTo> mealTos) {
-        Map<String, MealTo> mealTosMap = new HashMap<>();
-        for (MealTo mealTo : mealTos) {
-            if (mealTosMap.containsKey(mealTo.getName())) {
-                throw new IllegalArgumentException("Meal name (" + mealTo.getName() + ") is duplicate");
+    private void checkMealListToDuplicate(List<Meal> meals) {
+        Map<String, Meal> mealMap = new HashMap<>();
+        for (Meal meal : meals) {
+            if (mealMap.containsKey(meal.getName())) {
+                throw new IllegalArgumentException("Meal name (" + meal.getName() + ") is duplicate");
             }
-            mealTosMap.put(mealTo.getName(), mealTo);
+            mealMap.put(meal.getName(), meal);
         }
     }
  //todo перенести  преобразование в ТО на слой контроллеров

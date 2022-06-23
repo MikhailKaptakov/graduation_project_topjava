@@ -33,25 +33,15 @@ public class User extends AbstractBaseNamedEntity {
     private Set<Role> roles;
 
     @Column(name = "last_vote_date", nullable = false)
-    @NotNull
     private LocalDate lastVoteDate;
 
     @Column(name = "last_vote_time", nullable = false)
-    @NotNull
     private LocalTime lastVoteTime;
 
     @Column(name = "voted_restaurant_id")
     private LocalDateTime votedRestaurantId;
 
     public User() {
-    }
-
-    public User(String name, String email, String password, Set<Role> roles) {
-        super(name);
-        this.email = email;
-        this.password = password;
-        this.roles = roles;
-        this.lastVoteDate = MIN;
     }
 
     public String getEmail() {

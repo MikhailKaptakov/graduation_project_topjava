@@ -9,6 +9,9 @@ import java.util.List;
 
 public class RestaurantUtil {
 
+    private RestaurantUtil() {
+    }
+
     public static List<RestaurantTo> createActualRestaurantTosList(List<Restaurant> restaurants) {
         return restaurants.stream().map(restaurant -> {
             return new RestaurantTo(restaurant);

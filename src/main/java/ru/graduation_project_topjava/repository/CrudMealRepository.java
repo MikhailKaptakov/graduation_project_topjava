@@ -12,7 +12,7 @@ import java.util.List;
 @Transactional(readOnly = true)
 public interface CrudMealRepository extends JpaRepository<Meal, Long> {
 
-    @Query("SELECT m from Meal m WHERE m.ownerRestaurant.id=:restaurantId AND m.mealDay =:day ORDER BY m.name ASC")
+    @Query("SELECT m from Meal m WHERE m.restaurant.id=:restaurantId AND m.mealDay =:day ORDER BY m.name ASC")
     List<Meal> findAllActual(@Param("restaurantId") long restaurantId, @Param("day")LocalDate day);
 }
 

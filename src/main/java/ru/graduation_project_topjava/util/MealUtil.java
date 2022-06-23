@@ -7,6 +7,9 @@ import java.util.List;
 
 public class MealUtil {
 
+    private MealUtil() {
+    }
+
     public static List<MealTo> createMealTosList(List<Meal> meals) {
         return meals.stream().map(MealTo::new).toList();
     }

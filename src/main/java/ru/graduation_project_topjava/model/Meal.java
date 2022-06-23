@@ -23,7 +23,7 @@ public class Meal extends AbstractBaseNamedEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "restaurant_id", nullable = false)
     @NotNull
-    private Restaurant ownerRestaurant;
+    private Restaurant restaurant;
 
     public Meal() {
     }
@@ -34,6 +34,13 @@ public class Meal extends AbstractBaseNamedEntity {
         this.mealDay = LocalDate.now();
     }
 
+    public Meal(long id, String name, int price, Restaurant restaurant) {
+        super(name);
+        this.id = id;
+        this.price = price;
+        this.mealDay = LocalDate.now();
+        this.restaurant = restaurant;
+    }
 
     public int getPrice() {
         return price;
@@ -43,8 +50,8 @@ public class Meal extends AbstractBaseNamedEntity {
         return mealDay;
     }
 
-    public Restaurant getOwnerRestaurant() {
-        return ownerRestaurant;
+    public Restaurant getRestaurant() {
+        return restaurant;
     }
 
     public void setPrice(int price) {
@@ -55,7 +62,7 @@ public class Meal extends AbstractBaseNamedEntity {
         this.mealDay = mealDay;
     }
 
-    public void setOwnerRestaurant(Restaurant ownerRestaurant) {
-        this.ownerRestaurant = ownerRestaurant;
+    public void setRestaurant(Restaurant ownerRestaurant) {
+        this.restaurant = ownerRestaurant;
     }
 }

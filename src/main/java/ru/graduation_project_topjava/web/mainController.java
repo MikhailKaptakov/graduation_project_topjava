@@ -6,8 +6,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import static org.slf4j.LoggerFactory.getLogger;
-
 @Controller
 public class mainController {
 private static final Logger log = LoggerFactory.getLogger(mainController.class);

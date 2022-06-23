@@ -9,6 +9,7 @@ import java.util.Objects;
 @MappedSuperclass
 @Access(AccessType.FIELD)
 public abstract class AbstractBaseEntity implements Persistable<Long> {
+
     public static final int START_SEQ = 10000;
     @Id
     @SequenceGenerator(name = "global_seq", sequenceName = "global_seq", allocationSize = 1, initialValue = START_SEQ)

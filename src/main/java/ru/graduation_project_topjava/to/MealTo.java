@@ -25,7 +25,7 @@ public class MealTo {
     }
 
     public MealTo(Meal meal) {
-        this(meal.getId(), meal.getName(), meal.getPrice(), meal.getOwnerRestaurant().getId());
+        this(meal.getId(), meal.getName(), meal.getPrice(), meal.getRestaurant().getId());
     }
 
     public Long getId() {
