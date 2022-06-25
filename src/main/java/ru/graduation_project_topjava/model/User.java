@@ -1,5 +1,9 @@
 package ru.graduation_project_topjava.model;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+import org.springframework.util.CollectionUtils;
+
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -8,6 +12,9 @@ import javax.validation.constraints.Size;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.EnumSet;
 import java.util.Set;
 
 @Entity
@@ -30,18 +37,18 @@ public class User extends AbstractBaseNamedEntity {
             uniqueConstraints = {@UniqueConstraint(columnNames = {"user_id", "role"}, name = "uk_user_roles")})
     @Column(name = "role")
     @ElementCollection(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Set<Role> roles;
 
-    @Column(name = "last_vote_date", nullable = false)
-    private LocalDate lastVoteDate;
-
-    @Column(name = "last_vote_time", nullable = false)
-    private LocalTime lastVoteTime;
-
-    @Column(name = "voted_restaurant_id")
-    private LocalDateTime votedRestaurantId;
-
     public User() {
+    }
+
+    public User(String name, String email, String password, Role... roles) {
+        super(name);
+        this.email = email;
+        this.password = password;
+        setRoles(Arrays.asList((roles)));
     }
 
     public String getEmail() {
@@ -56,18 +63,6 @@ public class User extends AbstractBaseNamedEntity {
         return roles;
     }
 
-    public LocalDate getLastVoteDate() {
-        return lastVoteDate;
-    }
-
-    public LocalTime getLastVoteTime() {
-        return lastVoteTime;
-    }
-
-    public LocalDateTime getVotedRestaurantId() {
-        return votedRestaurantId;
-    }
-
     public void setEmail(String email) {
         this.email = email;
     }
@@ -76,19 +71,8 @@ public class User extends AbstractBaseNamedEntity {
         this.password = password;
     }
 
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
+    public void setRoles(Collection<Role> roles) {
+        this.roles = CollectionUtils.isEmpty(roles) ? EnumSet.noneOf(Role.class) : EnumSet.copyOf(roles);
     }
 
-    public void setLastVoteDate(LocalDate lastVoteDate) {
-        this.lastVoteDate = lastVoteDate;
-    }
-
-    public void setLastVoteTime(LocalTime lastVoteTime) {
-        this.lastVoteTime = lastVoteTime;
-    }
-
-    public void setVotedRestaurantId(LocalDateTime votedRestaurantId) {
-        this.votedRestaurantId = votedRestaurantId;
-    }
 }

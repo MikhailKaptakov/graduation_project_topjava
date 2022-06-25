@@ -47,7 +47,4 @@ public class RestaurantTo {
         return mealTos;
     }
 
-    public Restaurant createNewRestaurant() {
-        return new Restaurant(getName(), MealUtil.createMealList(getMealTos()));
-    }
 }

@@ -1,26 +1,24 @@
 package ru.graduation_project_topjava.model;
 
-
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "restaurants")
+@Table(name = "restaurants", uniqueConstraints = {@UniqueConstraint(columnNames = {"name"},
+        name = "restaurants_unique_name_idx")})
 public class Restaurant extends AbstractBaseNamedEntity{
 
     @Column(name = "last_update", nullable = false)
     @NotNull
     private LocalDate lastUpdateDate;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "restaurant")
-    @OrderBy("name DESC")
+    @Transient
     private List<Meal> meals;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "restaurant")
-    @OrderBy("voteTime DESC")
+    @Transient
     private List<Vote> votes;
 
     public Restaurant() {
@@ -29,7 +27,6 @@ public class Restaurant extends AbstractBaseNamedEntity{
     public Restaurant(String name, List<Meal> meals) {
         super(name);
         this.meals = meals;
-        this.votes = Collections.emptyList();
         this.lastUpdateDate = MIN;
     }
 
@@ -60,4 +57,20 @@ public class Restaurant extends AbstractBaseNamedEntity{
     public int getVotesCount() {
         return votes.size();
     }
+
+    public void addMeal(Meal meal) {
+        if (meals == null) {
+            meals = new ArrayList<>();
+        }
+        meals.add(meal);
+    }
+
+    public void addVote(Vote vote) {
+        if (votes == null) {
+            votes = new ArrayList<>();
+        }
+        votes.add(vote);
+    }
+
+
 }

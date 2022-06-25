@@ -1,77 +1,72 @@
 package ru.graduation_project_topjava.repository;
 
-import org.hibernate.annotations.QueryHints;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+import ru.graduation_project_topjava.model.Meal;
 import ru.graduation_project_topjava.model.Restaurant;
+import ru.graduation_project_topjava.model.Vote;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Repository
 @Transactional(readOnly = true)
 public class DataJpaRestaurantRepository {
 
-    @PersistenceContext
-    EntityManager entityManager;
-
     private final CrudRestaurantRepository restaurantRepository;
+    private final CrudMealRepository mealRepository;
+    private final CrudVoteRepository voteRepository;
 
-    public DataJpaRestaurantRepository(CrudRestaurantRepository restaurantRepository) {
+    public DataJpaRestaurantRepository(CrudRestaurantRepository restaurantRepository,
+                                       CrudMealRepository mealRepository,
+                                       CrudVoteRepository voteRepository) {
         this.restaurantRepository = restaurantRepository;
+        this.mealRepository = mealRepository;
+        this.voteRepository = voteRepository;
     }
 
-    @Transactional
-    public Restaurant save(Restaurant restaurant) {
-        if (!restaurant.isNew()) {
-            return null;
+    public List<Restaurant> getAllNotActual() {
+        return restaurantRepository.findAllWithoutDate(LocalDate.now());
+    }
+
+    public List<Restaurant> getAllActual() {
+        LocalDate actualDate = LocalDate.now();
+        List<Restaurant> restaurants = restaurantRepository.findAllByDate(actualDate);
+        List<Meal> meals = mealRepository.findAllByDate(actualDate);
+        List<Vote> votes = voteRepository.findAllByDate(actualDate);
+
+        Map<Long, Restaurant> restaurantMap = getRestaurantMap(restaurants);
+        setMeals(restaurantMap, meals);
+        setVotes(restaurantMap, votes);
+        return restaurants;
+    }
+
+    private Map<Long, Restaurant> getRestaurantMap(List<Restaurant> restaurants) {
+        Map<Long, Restaurant> restaurantMap = new HashMap<>();
+        for (Restaurant restaurant : restaurants) {
+            restaurantMap.put(restaurant.getId(), restaurant);
         }
-        return restaurantRepository.save(restaurant);
+        return restaurantMap;
     }
 
-    public List<Restaurant> getNotActualRestaurants()  {
-
-        return findAllNotActual(LocalDate.now());
+    private void setMeals(Map<Long, Restaurant> restaurantMap, List<Meal> meals) {
+        for (Meal meal : meals) {
+            Long restaurantId = meal.getRestaurantId();
+            if (restaurantMap.containsKey(restaurantId)) {
+                restaurantMap.get(restaurantId).addMeal(meal);
+            }
+        }
     }
 
-    public List<Restaurant> getAllActualRestaurants() {
-
-        return findAllActual();
+    private void setVotes(Map<Long, Restaurant> restaurantMap, List<Vote> votes) {
+        for (Vote vote : votes) {
+            Long restaurantId = vote.getRestaurantId();
+            if (restaurantMap.containsKey(restaurantId)) {
+                restaurantMap.get(restaurantId).addVote(vote);
+            }
+        }
     }
-
-    private  List<Restaurant> findAllActual() {
-        LocalDate day = LocalDate.now();
-        List<Restaurant> restaurants = entityManager.createQuery("select distinct r from Restaurant r" +
-                        " left join fetch r.meals m where r.lastUpdateDate =:day AND m.mealDay =:day", Restaurant.class)
-                .setParameter("day", day)
-                .setHint(QueryHints.PASS_DISTINCT_THROUGH, false)
-                .getResultList();
-        /*restaurants = entityManager.createQuery(" select distinct r from Restaurant r " +
-                        "left join fetch r.votes v where r.lastUpdateDate =:day AND v.voteDate =:day", Restaurant.class)
-                .setParameter("day", day)
-                .setHint(QueryHints.PASS_DISTINCT_THROUGH, false)
-                .getResultList();*/
-        return restaurants;
-    }
-
-    private  List<Restaurant> findAllNotActual(@Param("day") LocalDate day) {
-        List<Restaurant> restaurants = entityManager.createQuery("select distinct r from Restaurant r" +
-                        " left join fetch r.meals m where r.lastUpdateDate <>: day AND m.mealDay =:day", Restaurant.class)
-                .setParameter("day", day)
-                .setHint(QueryHints.PASS_DISTINCT_THROUGH, false)
-                .getResultList();
-      /*  restaurants = entityManager.createQuery(" select distinct r from Restaurant r " +
-                        "left join fetch r.votes v where r.lastUpdateDate <>:day AND v.voteDate =:day", Restaurant.class)
-                .setParameter("day", day)
-                .setHint(QueryHints.PASS_DISTINCT_THROUGH, false)
-                .getResultList();*/
-        return restaurants;
-    }
-
-
 }
 

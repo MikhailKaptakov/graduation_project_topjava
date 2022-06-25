@@ -7,7 +7,7 @@ import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "meals", uniqueConstraints = {@UniqueConstraint(columnNames = {"name", "restaurant_id", "meal_day"},
+@Table(name = "meals", uniqueConstraints = {@UniqueConstraint(columnNames = {"name", "restaurant_id", "meal_date"},
         name = "meals_unique_name_restaurant_daily_menu_idx")})
 public class Meal extends AbstractBaseNamedEntity {
 
@@ -16,9 +16,9 @@ public class Meal extends AbstractBaseNamedEntity {
     @NotNull
     private int price;
 
-    @Column(name = "meal_day", nullable = false, columnDefinition = "timestamp default now()", updatable = false)
+    @Column(name = "meal_date", nullable = false, columnDefinition = "date default current_date", updatable = false)
     @NotNull
-    private LocalDate mealDay;
+    private LocalDate mealDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "restaurant_id", nullable = false)
@@ -28,17 +28,11 @@ public class Meal extends AbstractBaseNamedEntity {
     public Meal() {
     }
 
-    public Meal(String name, int price) {
-        super(name);
-        this.price = price;
-        this.mealDay = LocalDate.now();
-    }
-
     public Meal(long id, String name, int price, Restaurant restaurant) {
         super(name);
         this.id = id;
         this.price = price;
-        this.mealDay = LocalDate.now();
+        this.mealDate = LocalDate.now();
         this.restaurant = restaurant;
     }
 
@@ -46,8 +40,8 @@ public class Meal extends AbstractBaseNamedEntity {
         return price;
     }
 
-    public LocalDate getMealDay() {
-        return mealDay;
+    public LocalDate getMealDate() {
+        return mealDate;
     }
 
     public Restaurant getRestaurant() {
@@ -58,11 +52,15 @@ public class Meal extends AbstractBaseNamedEntity {
         this.price = price;
     }
 
-    public void setMealDay(LocalDate mealDay) {
-        this.mealDay = mealDay;
+    public void setMealDate(LocalDate mealDay) {
+        this.mealDate = mealDay;
     }
 
     public void setRestaurant(Restaurant ownerRestaurant) {
         this.restaurant = ownerRestaurant;
+    }
+
+    public Long getRestaurantId() {
+        return restaurant.getId();
     }
 }

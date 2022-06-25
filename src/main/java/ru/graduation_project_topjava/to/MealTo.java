@@ -39,8 +39,4 @@ public class MealTo {
     public int getPrice() {
         return price;
     }
-
-    public Meal createNewMeal() {
-        return new Meal(this.name, this.price);
-    }
 }
