@@ -37,7 +37,7 @@ class CrudVoteRepositoryTest {
     @Test
     void getActualVote() {
         Vote vote = voteRepository.getVote(UserTestData.USER_ID, LocalDate.now()).orElse(null);
-        VoteTestData.VOTE_MATCHER.assertMatch(vote,VoteTestData.actualVote1UserRestaurant2);
+        VoteTestData.VOTE_MATCHER.assertMatch(vote,VoteTestData.actualVote1UserActualRestaurant);
     }
 
     @Test

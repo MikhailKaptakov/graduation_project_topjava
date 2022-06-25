@@ -15,7 +15,7 @@ import java.time.LocalTime;
 @Service
 public class UserService {
 
-    private static final LocalTime maxRevoteTime = LocalTime.of(11,00);
+    public static final LocalTime maxRevoteTime = LocalTime.of(11,00);
 
     private final CrudVoteRepository voteRepository;
 

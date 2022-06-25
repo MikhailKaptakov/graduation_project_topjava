@@ -20,6 +20,6 @@ public class UserTestData {
     static {
         user.setId(USER_ID);
         admin.setId(ADMIN_ID);
-        user.setId(USER2_ID);
+        user2.setId(USER2_ID);
     }
 }
