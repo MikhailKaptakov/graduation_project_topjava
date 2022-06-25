@@ -19,12 +19,14 @@ VALUES ('20','old soup','0001-01-01', '500', '1'),
 
 INSERT INTO USERS (ID, NAME, EMAIL, PASSWORD)
 VALUES ('100','User', 'userMail@test.test', 'userPassword'),
-       ('101','Admin', 'adminMail@test.test', 'adminPassword');
+       ('101','Admin', 'adminMail@test.test', 'adminPassword'),
+       ('102','User2', 'user2Mail@test.test', 'user2Password');
 
 INSERT INTO USER_ROLES (USER_ID, ROLE)
 VALUES (100, 'USER'),
        (101, 'USER'),
-       (101, 'ADMIN');
+       (101, 'ADMIN'),
+       (102, 'USER');
 
 INSERT INTO VOTES (ID, USER_ID, RESTAURANT_ID, VOTE_DATE)
 VALUES ('150','100', '1', '1000-10-10'),

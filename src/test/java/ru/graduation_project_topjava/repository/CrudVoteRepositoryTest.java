@@ -6,9 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
-import ru.graduation_project_topjava.NotEqualException;
-import ru.graduation_project_topjava.TimingExtension;
-import ru.graduation_project_topjava.VoteTestData;
+import ru.graduation_project_topjava.*;
 import ru.graduation_project_topjava.model.Vote;
 
 import java.time.LocalDate;
@@ -37,7 +35,14 @@ class CrudVoteRepositoryTest {
     }
 
     @Test
-    void getVote() {
-        //todo create test
+    void getActualVote() {
+        Vote vote = voteRepository.getVote(UserTestData.USER_ID, LocalDate.now()).orElse(null);
+        VoteTestData.VOTE_MATCHER.assertMatch(vote,VoteTestData.actualVote1UserRestaurant2);
+    }
+
+    @Test
+    void getNullVote() {
+        Vote vote = voteRepository.getVote(UserTestData.USER2_ID, LocalDate.now()).orElse(null);
+        VoteTestData.VOTE_MATCHER.assertMatch(vote,null);
     }
 }
