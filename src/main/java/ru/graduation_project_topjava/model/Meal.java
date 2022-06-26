@@ -28,12 +28,10 @@ public class Meal extends AbstractBaseNamedEntity {
     public Meal() {
     }
 
-    public Meal(long id, String name, int price, Restaurant restaurant) {
+    public Meal(String name, int price) {
         super(name);
-        this.id = id;
         this.price = price;
         this.mealDate = LocalDate.now();
-        this.restaurant = restaurant;
     }
 
     public int getPrice() {

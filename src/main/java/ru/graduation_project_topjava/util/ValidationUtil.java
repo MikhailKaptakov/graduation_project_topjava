@@ -34,6 +34,12 @@ public class ValidationUtil {
         }
     }
 
+    public static void checkHaveId(AbstractBaseEntity entity) {
+        if (entity.isNew()) {
+            throw new IllegalArgumentException(entity + " haven't id");
+        }
+    }
+
     public static void assureIdConsistent(AbstractBaseEntity entity, long id) {
 //      conservative when you reply, but accept liberally (http://stackoverflow.com/a/32728226/548473)
         if (entity.isNew()) {

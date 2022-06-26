@@ -30,6 +30,12 @@ public class Restaurant extends AbstractBaseNamedEntity{
         this.lastUpdateDate = MIN;
     }
 
+    public Restaurant(Restaurant restaurant) {
+        this.id = restaurant.getId();
+        this.name = restaurant.getName();
+        this.lastUpdateDate = restaurant.getLastUpdateDate();
+    }
+
     public LocalDate getLastUpdateDate() {
         return lastUpdateDate;
     }

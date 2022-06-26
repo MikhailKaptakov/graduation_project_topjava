@@ -27,6 +27,16 @@ public class DataJpaRestaurantRepository {
         this.voteRepository = voteRepository;
     }
 
+    @Transactional
+    public Restaurant save(Restaurant restaurant) {
+        return restaurantRepository.save(restaurant);
+    }
+
+    @Transactional
+    public Restaurant findById(Long restaurantId) {
+        return restaurantRepository.findById(restaurantId).orElse(null);
+    }
+
     public List<Restaurant> getAllNotActual() {
         return restaurantRepository.findAllWithoutDate(LocalDate.now());
     }

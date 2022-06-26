@@ -23,7 +23,9 @@ public class RestaurantTestData {
     public static final long ACTUAL_RESTAURANT_ID = 2;
 
     public static final Restaurant notActualRestaurant = new Restaurant();
-    public static final Restaurant actualRestaurant = new Restaurant("ActualRestaurant", MealTestData.actualRestaurantActualMeals);
+    public static final Restaurant actualRestaurant = new Restaurant("ActualRestaurant",
+            MealTestData.actualRestaurantActualMeals);
+    public static final Restaurant newRestaurant = new Restaurant();
 
     static {
         notActualRestaurant.setId(NOT_ACTUAL_RESTAURANT_ID);
@@ -32,6 +34,8 @@ public class RestaurantTestData {
         actualRestaurant.setId(ACTUAL_RESTAURANT_ID);
         actualRestaurant.setLastUpdateDate(LocalDate.now());
         actualRestaurant.setVotes(VoteTestData.actualRestaurant2Votes);
+        newRestaurant.setName("NewRestaurant");
+        newRestaurant.setLastUpdateDate(Restaurant.MIN);
     }
 
 }

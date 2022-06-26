@@ -2,11 +2,13 @@ package ru.graduation_project_topjava.service;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
 import ru.graduation_project_topjava.model.Restaurant;
 import ru.graduation_project_topjava.model.User;
 import ru.graduation_project_topjava.model.Vote;
 import ru.graduation_project_topjava.repository.CrudUserRepository;
 import ru.graduation_project_topjava.repository.CrudVoteRepository;
+import ru.graduation_project_topjava.util.ValidationUtil;
 import ru.graduation_project_topjava.util.exception.ConditionFailedException;
 
 import java.time.LocalDate;
@@ -28,6 +30,10 @@ public class UserService {
 
     @Transactional
     public void addVote(User user, Restaurant restaurant) {
+        Assert.notNull(user, "user cant be null");
+        Assert.notNull(restaurant, "restaurant cant be null");
+        ValidationUtil.checkHaveId(user);
+        ValidationUtil.checkHaveId(restaurant);
         Vote vote = voteRepository.getVote(user.getId(), LocalDate.now()).orElse(null);
         if (vote != null) {
             if (LocalTime.now().isAfter(maxRevoteTime)) {
