@@ -34,10 +34,10 @@ class UserServiceTest {
     void addVoteRevoteTest() {
         if (LocalTime.now().isAfter(UserService.maxRevoteTime)) {
             assertThrows(ConditionFailedException.class,
-                    () -> {userService.addVote(UserTestData.user, RestaurantTestData.notActualRestaurant);});
+                    () -> {userService.addVote(UserTestData.getUser(), RestaurantTestData.getNotActualRestaurant());});
         } else {
-            Vote actualVote = voteRepository.getVote(UserTestData.user.getId(), LocalDate.now()).orElse(null);
-            Vote expectedVote = new Vote(UserTestData.user, RestaurantTestData.notActualRestaurant);
+            Vote actualVote = voteRepository.getVote(UserTestData.getUser().getId(), LocalDate.now()).orElse(null);
+            Vote expectedVote = new Vote(UserTestData.getUser(), RestaurantTestData.getNotActualRestaurant());
             expectedVote.setId((long)152);
             VoteTestData.VOTE_MATCHER.assertMatch(actualVote, expectedVote);
         }
@@ -45,9 +45,9 @@ class UserServiceTest {
 
     @Test
     void addNewVote() {
-        userService.addVote(UserTestData.user2, RestaurantTestData.notActualRestaurant);
-        Vote actualVote = voteRepository.getVote(UserTestData.user2.getId(), LocalDate.now()).orElse(null);
-        Vote expectedVote = new Vote(UserTestData.user2, RestaurantTestData.notActualRestaurant);
+        userService.addVote(UserTestData.getUser2(), RestaurantTestData.getNotActualRestaurant());
+        Vote actualVote = voteRepository.getVote(UserTestData.getUser2().getId(), LocalDate.now()).orElse(null);
+        Vote expectedVote = new Vote(UserTestData.getUser2(), RestaurantTestData.getNotActualRestaurant());
         expectedVote.setId((long)10000);
         VoteTestData.VOTE_MATCHER.assertMatch(actualVote, expectedVote);
     }

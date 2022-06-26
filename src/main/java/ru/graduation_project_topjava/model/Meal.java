@@ -34,6 +34,17 @@ public class Meal extends AbstractBaseNamedEntity {
         this.mealDate = LocalDate.now();
     }
 
+    public Meal (Meal meal) {
+       this(meal.id, meal.name, meal.price, meal.mealDate, meal.restaurant);
+    }
+
+    public Meal(Long id, String name, int price, LocalDate mealDate, Restaurant restaurant) {
+        super(id, name);
+        this.price = price;
+        this.mealDate = mealDate;
+        this.restaurant = restaurant;
+    }
+
     public int getPrice() {
         return price;
     }

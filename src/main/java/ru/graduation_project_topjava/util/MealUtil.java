@@ -13,4 +13,9 @@ public class MealUtil {
     public static List<MealTo> createMealTosList(List<Meal> meals) {
         return meals.stream().map(MealTo::new).toList();
     }
+
+    public static void checkMealsIsNew(List<Meal> meals) {
+        meals.forEach(ValidationUtil::checkNew);
+    }
+
 }

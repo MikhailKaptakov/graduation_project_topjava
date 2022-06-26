@@ -24,16 +24,20 @@ public class Restaurant extends AbstractBaseNamedEntity{
     public Restaurant() {
     }
 
-    public Restaurant(String name, List<Meal> meals) {
+    public Restaurant(String name) {
         super(name);
-        this.meals = meals;
         this.lastUpdateDate = MIN;
     }
 
+    public Restaurant(Long id, String name, LocalDate lastUpdateDate, List<Meal> meals, List<Vote> votes) {
+        super(id, name);
+        this.lastUpdateDate = lastUpdateDate;
+        this.meals = meals;
+        this.votes = votes;
+    }
+
     public Restaurant(Restaurant restaurant) {
-        this.id = restaurant.getId();
-        this.name = restaurant.getName();
-        this.lastUpdateDate = restaurant.getLastUpdateDate();
+        this(restaurant.id, restaurant.name, restaurant.lastUpdateDate, restaurant.meals, restaurant.votes);
     }
 
     public LocalDate getLastUpdateDate() {

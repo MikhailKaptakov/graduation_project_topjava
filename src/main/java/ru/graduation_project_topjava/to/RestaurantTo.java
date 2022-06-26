@@ -1,6 +1,5 @@
 package ru.graduation_project_topjava.to;
 
-import ru.graduation_project_topjava.model.Meal;
 import ru.graduation_project_topjava.model.Restaurant;
 import ru.graduation_project_topjava.util.MealUtil;
 

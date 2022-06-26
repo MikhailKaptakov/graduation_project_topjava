@@ -24,12 +24,12 @@ class CrudRestaurantRepositoryTest {
     @Test
     void findAllByDate() {
         List<Restaurant> restaurants = restaurantRepository.findAllByDate(LocalDate.now());
-        RestaurantTestData.IGNORE_FIELDS_RESTAURANT_MATCHER.assertMatch(restaurants, RestaurantTestData.actualRestaurant);
+        RestaurantTestData.IGNORE_FIELDS_RESTAURANT_MATCHER.assertMatch(restaurants, RestaurantTestData.getActualRestaurant());
     }
 
     @Test
     void findAllWithoutDate() {
         List<Restaurant> restaurants = restaurantRepository.findAllWithoutDate(LocalDate.now());
-        RestaurantTestData.IGNORE_FIELDS_RESTAURANT_MATCHER.assertMatch(restaurants, RestaurantTestData.notActualRestaurant);
+        RestaurantTestData.IGNORE_FIELDS_RESTAURANT_MATCHER.assertMatch(restaurants, RestaurantTestData.getNotActualRestaurant());
     }
 }

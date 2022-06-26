@@ -5,9 +5,6 @@ import ru.graduation_project_topjava.to.RestaurantTo;
 
 import java.time.LocalDate;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
-
 public class RestaurantTestData {
     public static final MatcherFactory.Matcher<Restaurant> RESTAURANT_MATCHER =
             MatcherFactory.usingIgnoringFieldsComparator(Restaurant.class,
@@ -22,20 +19,28 @@ public class RestaurantTestData {
     public static final long NOT_ACTUAL_RESTAURANT_ID = 1;
     public static final long ACTUAL_RESTAURANT_ID = 2;
 
-    public static final Restaurant notActualRestaurant = new Restaurant();
-    public static final Restaurant actualRestaurant = new Restaurant("ActualRestaurant",
-            MealTestData.actualRestaurantActualMeals);
-    public static final Restaurant newRestaurant = new Restaurant();
+    private static final Restaurant notActualRestaurant = new Restaurant("NotActualRestaurant");
+    private static final Restaurant actualRestaurant = new Restaurant("ActualRestaurant");
+    private static final Restaurant newRestaurant = new Restaurant("NewRestaurant");
 
     static {
         notActualRestaurant.setId(NOT_ACTUAL_RESTAURANT_ID);
-        notActualRestaurant.setName("NotActualRestaurant");
-        notActualRestaurant.setLastUpdateDate(Restaurant.MIN);
         actualRestaurant.setId(ACTUAL_RESTAURANT_ID);
         actualRestaurant.setLastUpdateDate(LocalDate.now());
-        actualRestaurant.setVotes(VoteTestData.actualRestaurant2Votes);
-        newRestaurant.setName("NewRestaurant");
+        actualRestaurant.setMeals(MealTestData.getActualRestaurantActualMeals());
+        actualRestaurant.setVotes(VoteTestData.getActualRestaurant2Votes());
         newRestaurant.setLastUpdateDate(Restaurant.MIN);
     }
 
+    public static Restaurant getNewRestaurant() {
+        return new Restaurant(newRestaurant);
+    }
+
+    public static Restaurant getActualRestaurant() {
+        return new Restaurant(actualRestaurant);
+    }
+
+    public static Restaurant getNotActualRestaurant() {
+        return new Restaurant(notActualRestaurant);
+    }
 }

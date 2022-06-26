@@ -22,13 +22,18 @@ class CrudVoteRepositoryTest {
 
     @Test
     void findAllByDate() {
-        List<Vote> votes = voteRepository.findAllByDate(LocalDate.now());
-        VoteTestData.VOTE_MATCHER.assertMatch(votes, VoteTestData.actualRestaurant2Votes);
-        for (int i = 0; i < votes.size(); i++) {
-            if (!votes.get(i).getRestaurantId().equals(VoteTestData.actualRestaurant2Votes.get(i).getRestaurantId())) {
+        List<Vote> actual = voteRepository.findAllByDate(LocalDate.now());
+        List<Vote> expected = VoteTestData.getActualRestaurant2Votes();
+        VoteTestData.VOTE_MATCHER.assertMatch(actual, expected);
+        checkVotesIdFields(actual, expected);
+    }
+
+    private void checkVotesIdFields(List<Vote> actualVotes, List<Vote> expectedVotes) {
+        for (int i = 0; i < actualVotes.size(); i++) {
+            if (!actualVotes.get(i).getRestaurantId().equals(expectedVotes.get(i).getRestaurantId())) {
                 throw new NotEqualException();
             }
-            if (!votes.get(i).getUserId().equals(VoteTestData.actualRestaurant2Votes.get(i).getUserId())) {
+            if (!actualVotes.get(i).getUserId().equals(expectedVotes.get(i).getUserId())) {
                 throw new NotEqualException();
             }
         }
@@ -37,7 +42,7 @@ class CrudVoteRepositoryTest {
     @Test
     void getActualVote() {
         Vote vote = voteRepository.getVote(UserTestData.USER_ID, LocalDate.now()).orElse(null);
-        VoteTestData.VOTE_MATCHER.assertMatch(vote,VoteTestData.actualVote1UserActualRestaurant);
+        VoteTestData.VOTE_MATCHER.assertMatch(vote,VoteTestData.getActualVote1UserActualRestaurant());
     }
 
     @Test

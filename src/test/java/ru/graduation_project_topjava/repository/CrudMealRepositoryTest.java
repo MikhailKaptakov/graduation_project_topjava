@@ -9,7 +9,6 @@ import org.springframework.test.context.jdbc.SqlConfig;
 import ru.graduation_project_topjava.MealTestData;
 import ru.graduation_project_topjava.TimingExtension;
 import ru.graduation_project_topjava.model.Meal;
-import ru.graduation_project_topjava.service.RestaurantService;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -25,6 +24,6 @@ class CrudMealRepositoryTest {
     @Test
     void findAllByDate() {
         List<Meal> meals = mealRepository.findAllByDate(LocalDate.now());
-        MealTestData.MEAL_MATCHER.assertMatch(meals, MealTestData.allActualMeals);
+        MealTestData.MEAL_MATCHER.assertMatch(meals, MealTestData.getAllActualMeals());
     }
 }

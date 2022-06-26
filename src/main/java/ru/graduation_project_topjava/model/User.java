@@ -7,11 +7,7 @@ import org.springframework.util.CollectionUtils;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.EnumSet;
@@ -49,6 +45,17 @@ public class User extends AbstractBaseNamedEntity {
         this.email = email;
         this.password = password;
         setRoles(Arrays.asList((roles)));
+    }
+
+    public User(Long id, String name, String email, String password, Set<Role> roles) {
+        super(id, name);
+        this.email = email;
+        this.password = password;
+        this.roles = roles;
+    }
+
+    public User(User user) {
+        this(user.id, user.name, user.email, user.password, user.roles);
     }
 
     public String getEmail() {

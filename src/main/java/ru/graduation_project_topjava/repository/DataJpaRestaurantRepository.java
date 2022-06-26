@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.Map;
 
 @Repository
-@Transactional(readOnly = true)
 public class DataJpaRestaurantRepository {
 
     private final CrudRestaurantRepository restaurantRepository;
@@ -27,12 +26,10 @@ public class DataJpaRestaurantRepository {
         this.voteRepository = voteRepository;
     }
 
-    @Transactional
-    public Restaurant save(Restaurant restaurant) {
-        return restaurantRepository.save(restaurant);
+    public Restaurant saveAndFlush(Restaurant restaurant) {
+        return restaurantRepository.saveAndFlush(restaurant);
     }
 
-    @Transactional
     public Restaurant findById(Long restaurantId) {
         return restaurantRepository.findById(restaurantId).orElse(null);
     }

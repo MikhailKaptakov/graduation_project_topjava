@@ -19,6 +19,10 @@ public abstract class AbstractBaseEntity implements Persistable<Long> {
     public AbstractBaseEntity() {
     }
 
+    public AbstractBaseEntity(Long id) {
+        this.id = id;
+    }
+
     public Long getId() {
         return id;
     }

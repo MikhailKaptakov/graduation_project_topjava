@@ -11,14 +11,14 @@ public class VoteTestData {
 
     public static final long FIRST_VOTE_ID = 150;
 
-    public static final Vote vote1UserNotActualRestaurant = new Vote(UserTestData.user, RestaurantTestData.notActualRestaurant);
-    public static final Vote vote2UserNotActualRestaurant = new Vote(UserTestData.user, RestaurantTestData.notActualRestaurant);
-    public static final Vote actualVote1UserActualRestaurant = new Vote(UserTestData.user, RestaurantTestData.actualRestaurant);
-    public static final Vote vote2UserActualRestaurant = new Vote(UserTestData.user, RestaurantTestData.actualRestaurant);
-    public static final Vote vote1AdminNotActualRestaurant = new Vote(UserTestData.admin, RestaurantTestData.notActualRestaurant);
-    public static final Vote vote2AdminNotActualRestaurant = new Vote(UserTestData.admin, RestaurantTestData.notActualRestaurant);
-    public static final Vote actualVote1AdminActualRestaurant = new Vote(UserTestData.admin, RestaurantTestData.actualRestaurant);
-    public static final Vote vote2AdminActualRestaurant = new Vote(UserTestData.admin, RestaurantTestData.actualRestaurant);
+    private static final Vote vote1UserNotActualRestaurant = new Vote(UserTestData.getUser(), RestaurantTestData.getNotActualRestaurant());
+    private static final Vote vote2UserNotActualRestaurant = new Vote(UserTestData.getUser(), RestaurantTestData.getNotActualRestaurant());
+    private static final Vote actualVote1UserActualRestaurant = new Vote(UserTestData.getUser(), RestaurantTestData.getActualRestaurant());
+    private static final Vote vote2UserActualRestaurant = new Vote(UserTestData.getUser(), RestaurantTestData.getActualRestaurant());
+    private static final Vote vote1AdminNotActualRestaurant = new Vote(UserTestData.getAdmin(), RestaurantTestData.getNotActualRestaurant());
+    private static final Vote vote2AdminNotActualRestaurant = new Vote(UserTestData.getAdmin(), RestaurantTestData.getNotActualRestaurant());
+    private static final Vote actualVote1AdminActualRestaurant = new Vote(UserTestData.getAdmin(), RestaurantTestData.getActualRestaurant());
+    private static final Vote vote2AdminActualRestaurant = new Vote(UserTestData.getAdmin(), RestaurantTestData.getActualRestaurant());
 
     static {
         vote1UserNotActualRestaurant.setId(FIRST_VOTE_ID);
@@ -37,5 +37,13 @@ public class VoteTestData {
         vote2AdminActualRestaurant.setVoteDate(LocalDate.of(2000,10,15));
     }
 
-    public static final List<Vote> actualRestaurant2Votes = List.of(actualVote1UserActualRestaurant, actualVote1AdminActualRestaurant);
+    public static List<Vote> getActualRestaurant2Votes() {
+        return List.of(new Vote(actualVote1UserActualRestaurant),
+            new Vote(actualVote1AdminActualRestaurant));
+    }
+
+    public static Vote getActualVote1UserActualRestaurant() {
+        return new Vote(actualVote1UserActualRestaurant);
+    }
+
 }

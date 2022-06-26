@@ -11,10 +11,7 @@ import ru.graduation_project_topjava.TimingExtension;
 import ru.graduation_project_topjava.model.AbstractBaseEntity;
 import ru.graduation_project_topjava.model.Restaurant;
 
-import java.time.LocalDate;
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Sql(scripts = "classpath:db/populateDB.sql", config = @SqlConfig(encoding = "UTF-8"), executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
@@ -27,34 +24,35 @@ class DataJpaRestaurantRepositoryTest {
     @Test
     void getAllNotActual() {
         List<Restaurant> restaurants = restaurantRepository.getAllNotActual();
-        RestaurantTestData.IGNORE_FIELDS_RESTAURANT_MATCHER.assertMatch(restaurants, RestaurantTestData.notActualRestaurant);
+        RestaurantTestData.IGNORE_FIELDS_RESTAURANT_MATCHER.assertMatch(restaurants,
+                RestaurantTestData.getNotActualRestaurant());
     }
 
     @Test
     void getAllActual() {
         List<Restaurant> restaurants = restaurantRepository.getAllActual();
-        RestaurantTestData.RESTAURANT_MATCHER.assertMatch(restaurants, RestaurantTestData.actualRestaurant);
+        RestaurantTestData.RESTAURANT_MATCHER.assertMatch(restaurants, RestaurantTestData.getActualRestaurant());
     }
 
     @Test
-    void save() {
-        Restaurant expected = RestaurantTestData.newRestaurant;
-        Restaurant actual = restaurantRepository.save(expected);
+    void saveAndFlush() {
+        Restaurant expected = RestaurantTestData.getNewRestaurant();
+        Restaurant actual = restaurantRepository.saveAndFlush(expected);
         expected.setId((long)AbstractBaseEntity.START_SEQ);
         RestaurantTestData.IGNORE_FIELDS_RESTAURANT_MATCHER.assertMatch(actual, expected);
     }
 
     @Test
-    void saveUpdateRestaurant() {
-        Restaurant expected = new Restaurant(RestaurantTestData.actualRestaurant);
+    void saveAndFlushUpdateRestaurant() {
+        Restaurant expected = RestaurantTestData.getActualRestaurant();
         expected.setName("new name");
-        Restaurant actual = restaurantRepository.save(expected);
+        Restaurant actual = restaurantRepository.saveAndFlush(expected);
         RestaurantTestData.IGNORE_FIELDS_RESTAURANT_MATCHER.assertMatch(actual, expected);
     }
 
     @Test
     void findById() {
-        Restaurant expected = RestaurantTestData.notActualRestaurant;
+        Restaurant expected = RestaurantTestData.getNotActualRestaurant();
         Restaurant actual = restaurantRepository.findById(expected.getId());
         RestaurantTestData.IGNORE_FIELDS_RESTAURANT_MATCHER.assertMatch(actual, expected);
     }

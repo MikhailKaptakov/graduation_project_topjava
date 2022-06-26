@@ -2,23 +2,19 @@ package ru.graduation_project_topjava.service;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
-import ru.graduation_project_topjava.NotEqualException;
+import ru.graduation_project_topjava.MealTestData;
 import ru.graduation_project_topjava.RestaurantTestData;
 import ru.graduation_project_topjava.TimingExtension;
+import ru.graduation_project_topjava.model.AbstractBaseEntity;
 import ru.graduation_project_topjava.model.Meal;
 import ru.graduation_project_topjava.model.Restaurant;
-import ru.graduation_project_topjava.model.Vote;
 
 import java.time.LocalDate;
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
 @Sql(scripts = "classpath:db/populateDB.sql", config = @SqlConfig(encoding = "UTF-8"), executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
@@ -26,27 +22,57 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class RestaurantServiceTest {
 
     @Autowired
-    private RestaurantService service;
+    private RestaurantService restaurantService;
 
     @Test
     public void getAllActual() {
-        List<Restaurant> allActual = service.getAllActual();
-        RestaurantTestData.RESTAURANT_MATCHER.assertMatch(allActual, RestaurantTestData.actualRestaurant);
+        List<Restaurant> allActual = restaurantService.getAllActual();
+        RestaurantTestData.RESTAURANT_MATCHER.assertMatch(allActual, RestaurantTestData.getActualRestaurant());
     }
 
     @Test
     public void getAllNotActual() {
-        List<Restaurant> allNotActual = service.getAllNotActual();
-        RestaurantTestData.IGNORE_FIELDS_RESTAURANT_MATCHER.assertMatch(allNotActual, RestaurantTestData.notActualRestaurant);
+        List<Restaurant> allNotActual = restaurantService.getAllNotActual();
+        RestaurantTestData.IGNORE_FIELDS_RESTAURANT_MATCHER.assertMatch(allNotActual,
+                RestaurantTestData.getNotActualRestaurant());
     }
 
     @Test
-    public void create() {
-    /*    User created = service.create(getNew());
-        int newId = created.id();
-        User newUser = getNew();
-        newUser.setId(newId);
-        USER_MATCHER.assertMatch(created, newUser);
-        USER_MATCHER.assertMatch(service.get(newId), newUser);*/
+    void createWithMeals() {
+        Restaurant expectedRestaurant = RestaurantTestData.getNewRestaurant();
+        List<Meal> expectedMeals = MealTestData.getNewRestaurantMeals();
+        Restaurant actual = restaurantService.createOrUpdateWithMeals(expectedMeals, expectedRestaurant);
+
+        setExpectedMealsParameters(expectedMeals, expectedRestaurant, 1);
+        expectedRestaurant.setLastUpdateDate(LocalDate.now());
+        expectedRestaurant.setId((long)AbstractBaseEntity.START_SEQ);
+        expectedRestaurant.setMeals(expectedMeals);
+
+        RestaurantTestData.RESTAURANT_MATCHER.assertMatch(actual, expectedRestaurant);
+    }
+
+        @Test
+    void updateWithMeals() {
+        List<Meal> expectedMeals = MealTestData.getNewRestaurantMeals();
+        Restaurant expectedRestaurant = RestaurantTestData.getNotActualRestaurant();
+        Restaurant actualRestaurant = restaurantService.createOrUpdateWithMeals(expectedMeals,
+                expectedRestaurant);
+
+        setExpectedMealsParameters(expectedMeals, expectedRestaurant, 0);
+        expectedRestaurant.setLastUpdateDate(LocalDate.now());
+        expectedRestaurant.setMeals(expectedMeals);
+
+        RestaurantTestData.RESTAURANT_MATCHER.assertMatch(actualRestaurant, expectedRestaurant);
+    }
+
+    private void setExpectedMealsParameters(List<Meal> expectedMeals, Restaurant expectedRestaurant,
+                                            int addingStartSequenceValue) {
+        for (int i = 0; i < expectedMeals.size(); i++) {
+            Meal meal = expectedMeals.get(i);
+            long newId = i + AbstractBaseEntity.START_SEQ + addingStartSequenceValue;
+            meal.setId(newId);
+            meal.setRestaurant(expectedRestaurant);
+        }
     }
 }
+
