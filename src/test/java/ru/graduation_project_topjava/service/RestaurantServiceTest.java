@@ -67,12 +67,8 @@ class RestaurantServiceTest {
 
     private void setExpectedMealsParameters(List<Meal> expectedMeals, Restaurant expectedRestaurant,
                                             int addingStartSequenceValue) {
-        for (int i = 0; i < expectedMeals.size(); i++) {
-            Meal meal = expectedMeals.get(i);
-            long newId = i + AbstractBaseEntity.START_SEQ + addingStartSequenceValue;
-            meal.setId(newId);
-            meal.setRestaurant(expectedRestaurant);
-        }
+        MealTestData.setMealsId(expectedMeals, AbstractBaseEntity.START_SEQ + addingStartSequenceValue);
+        MealTestData.setMealsRestaurant(expectedMeals, expectedRestaurant);
     }
 }
 

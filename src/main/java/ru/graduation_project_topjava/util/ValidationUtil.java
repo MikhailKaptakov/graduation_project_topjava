@@ -29,20 +29,20 @@ public class ValidationUtil {
     }
 
     public static void checkNew(AbstractBaseEntity entity) {
-        if (!entity.isNew()) {
+        if (!entity.itsNew()) {
             throw new IllegalArgumentException(entity + " must be new (id=null)");
         }
     }
 
     public static void checkHaveId(AbstractBaseEntity entity) {
-        if (entity.isNew()) {
+        if (entity.itsNew()) {
             throw new IllegalArgumentException(entity + " haven't id");
         }
     }
 
     public static void assureIdConsistent(AbstractBaseEntity entity, long id) {
 //      conservative when you reply, but accept liberally (http://stackoverflow.com/a/32728226/548473)
-        if (entity.isNew()) {
+        if (entity.itsNew()) {
             entity.setId(id);
         } else if (entity.getId() != id) {
             throw new IllegalArgumentException(entity + " must be with id=" + id);

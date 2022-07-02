@@ -35,8 +35,14 @@ public class RestaurantService {
     @Transactional
     public Restaurant createOrUpdateWithMeals(List<Meal> newActualMeals, Restaurant restaurant) {
         MealUtil.checkMealsIsNew(newActualMeals);
+        Restaurant restaurantWithUpdatedLastUpdateDateField;
+        if (!restaurant.itsNew()) {
+            restaurantWithUpdatedLastUpdateDateField = restaurantRepository.findById(restaurant.getId());
+            restaurantWithUpdatedLastUpdateDateField.setLastUpdateDate(LocalDate.now());
+        } else {
+            restaurantWithUpdatedLastUpdateDateField = getUpdatedRestaurant(restaurant);
+        }
 
-        Restaurant restaurantWithUpdatedLastUpdateDateField = getUpdatedRestaurant(restaurant);
         Restaurant savedRestaurant = restaurantRepository.saveAndFlush(restaurantWithUpdatedLastUpdateDateField);
 
         List<Meal> mealsWithUpdatedRestaurantField = getUpdatedMeals(newActualMeals, savedRestaurant);
@@ -44,6 +50,12 @@ public class RestaurantService {
 
         savedRestaurant.setMeals(savedMeals);
         return savedRestaurant;
+    }
+
+    private Restaurant getUpdatedRestaurant(Restaurant restaurant) {
+        Restaurant updateDateRestaurant = new Restaurant(restaurant);
+        updateDateRestaurant.setLastUpdateDate(LocalDate.now());
+        return updateDateRestaurant;
     }
 
     private List<Meal> getUpdatedMeals(List<Meal> meals, Restaurant restaurant) {
@@ -54,12 +66,6 @@ public class RestaurantService {
             updatedMeals.add(updatedMeal);
         }
         return updatedMeals;
-    }
-
-    private Restaurant getUpdatedRestaurant(Restaurant restaurant) {
-        Restaurant updateDateRestaurant = new Restaurant(restaurant);
-        updateDateRestaurant.setLastUpdateDate(LocalDate.now());
-        return updateDateRestaurant;
     }
 
 }

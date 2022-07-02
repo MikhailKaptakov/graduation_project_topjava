@@ -29,7 +29,7 @@ public class RestaurantTo {
     }
 
     public  RestaurantTo(Restaurant restaurant)  {
-        this(restaurant.getId(), restaurant.getName(), MealUtil.createMealTosList(restaurant.getMeals()), restaurant.getVotesCount());
+        this(restaurant.getId(), restaurant.getName(), MealUtil.createMealTosList(restaurant.getMeals()), restaurant.takeVotesCount());
     }
 
     public Long getId() {

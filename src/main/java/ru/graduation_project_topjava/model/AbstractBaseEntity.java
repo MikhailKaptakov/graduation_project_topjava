@@ -2,13 +2,14 @@ package ru.graduation_project_topjava.model;
 
 import org.hibernate.Hibernate;
 import org.springframework.data.domain.Persistable;
+import ru.graduation_project_topjava.HasId;
 
 import javax.persistence.*;
 import java.util.Objects;
 
 @MappedSuperclass
 @Access(AccessType.FIELD)
-public abstract class AbstractBaseEntity implements Persistable<Long> {
+public abstract class AbstractBaseEntity implements HasId {
 
     public static final int START_SEQ = 10000;
     @Id
@@ -31,7 +32,7 @@ public abstract class AbstractBaseEntity implements Persistable<Long> {
         this.id = id;
     }
 
-    public boolean isNew() {
+    public boolean itsNew() {
         return this.id == null;
     }
 

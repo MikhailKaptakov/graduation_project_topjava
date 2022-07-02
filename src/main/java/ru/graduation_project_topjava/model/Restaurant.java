@@ -1,5 +1,10 @@
 package ru.graduation_project_topjava.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonGetter;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonSetter;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
@@ -22,11 +27,15 @@ public class Restaurant extends AbstractBaseNamedEntity{
     private List<Vote> votes;
 
     public Restaurant() {
+        this.meals = new ArrayList<>();
+        this.votes = new ArrayList<>();
     }
 
     public Restaurant(String name) {
         super(name);
         this.lastUpdateDate = MIN;
+        this.meals = new ArrayList<>();
+        this.votes = new ArrayList<>();
     }
 
     public Restaurant(Long id, String name, LocalDate lastUpdateDate, List<Meal> meals, List<Vote> votes) {
@@ -44,10 +53,12 @@ public class Restaurant extends AbstractBaseNamedEntity{
         return lastUpdateDate;
     }
 
+    @JsonGetter(value = "meals")
     public List<Meal> getMeals() {
         return meals;
     }
 
+    @JsonGetter(value = "votes")
     public List<Vote> getVotes() {
         return votes;
     }
@@ -56,15 +67,17 @@ public class Restaurant extends AbstractBaseNamedEntity{
         this.lastUpdateDate = lastUpdateDate;
     }
 
+    @JsonSetter(value = "meals")
     public void setMeals(List<Meal> meals) {
         this.meals = meals;
     }
 
+    @JsonSetter(value = "votes")
     public void setVotes(List<Vote> votes) {
         this.votes = votes;
     }
 
-    public int getVotesCount() {
+    public int takeVotesCount() {
         return votes.size();
     }
 

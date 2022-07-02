@@ -6,10 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
-import ru.graduation_project_topjava.RestaurantTestData;
-import ru.graduation_project_topjava.TimingExtension;
-import ru.graduation_project_topjava.UserTestData;
-import ru.graduation_project_topjava.VoteTestData;
+import ru.graduation_project_topjava.*;
 import ru.graduation_project_topjava.model.Vote;
 import ru.graduation_project_topjava.repository.CrudVoteRepository;
 import ru.graduation_project_topjava.util.exception.ConditionFailedException;
@@ -34,7 +31,8 @@ class UserServiceTest {
     void addVoteRevoteTest() {
         if (LocalTime.now().isAfter(UserService.maxRevoteTime)) {
             assertThrows(ConditionFailedException.class,
-                    () -> {userService.addVote(UserTestData.getUser(), RestaurantTestData.getNotActualRestaurant());});
+                    () -> {userService.addVote(UserTestData.getUser().getId(),
+                            RestaurantTestData.getNotActualRestaurant().getId());});
         } else {
             Vote actualVote = voteRepository.getVote(UserTestData.getUser().getId(), LocalDate.now()).orElse(null);
             Vote expectedVote = new Vote(UserTestData.getUser(), RestaurantTestData.getNotActualRestaurant());
@@ -45,7 +43,7 @@ class UserServiceTest {
 
     @Test
     void addNewVote() {
-        userService.addVote(UserTestData.getUser2(), RestaurantTestData.getNotActualRestaurant());
+        userService.addVote(UserTestData.getUser2().getId(), RestaurantTestData.getNotActualRestaurant().getId());
         Vote actualVote = voteRepository.getVote(UserTestData.getUser2().getId(), LocalDate.now()).orElse(null);
         Vote expectedVote = new Vote(UserTestData.getUser2(), RestaurantTestData.getNotActualRestaurant());
         expectedVote.setId((long)10000);

@@ -1,5 +1,8 @@
 package ru.graduation_project_topjava.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.hibernate.validator.constraints.Range;
 
 import javax.persistence.*;
@@ -22,6 +25,7 @@ public class Meal extends AbstractBaseNamedEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "restaurant_id", nullable = false)
+    @JsonBackReference(value = "meal_restaurant_reference")
     @NotNull
     private Restaurant restaurant;
 
@@ -69,6 +73,7 @@ public class Meal extends AbstractBaseNamedEntity {
         this.restaurant = ownerRestaurant;
     }
 
+    @JsonIgnore
     public Long getRestaurantId() {
         return restaurant.getId();
     }

@@ -1,5 +1,9 @@
 package ru.graduation_project_topjava.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
@@ -12,11 +16,13 @@ public class Vote extends AbstractBaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     @NotNull
+    @JsonBackReference (value = "vote_user_reference")
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "restaurant_id", nullable = false)
     @NotNull
+    @JsonBackReference(value = "vote_restaurant_reference")
     private Restaurant restaurant;
 
     @Column(name = "vote_date", nullable = false, columnDefinition = "date default current_date")
@@ -67,12 +73,16 @@ public class Vote extends AbstractBaseEntity {
         this.voteDate = voteDate;
     }
 
+    @JsonIgnore
     public Long getRestaurantId() {
         return restaurant.getId();
     }
 
+    @JsonIgnore
     public Long getUserId() {
         return user.getId();
     }
+
+
 
 }
