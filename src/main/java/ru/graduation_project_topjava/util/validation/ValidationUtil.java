@@ -1,4 +1,4 @@
-package ru.graduation_project_topjava.util;
+package ru.graduation_project_topjava.util.validation;
 
 import ru.graduation_project_topjava.model.AbstractBaseEntity;
 import ru.graduation_project_topjava.util.exception.NotFoundException;

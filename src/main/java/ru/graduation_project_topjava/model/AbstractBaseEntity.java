@@ -32,10 +32,6 @@ public abstract class AbstractBaseEntity implements HasId {
         this.id = id;
     }
 
-    public boolean itsNew() {
-        return this.id == null;
-    }
-
     @Override
     public String toString() {
         return getClass().getSimpleName() + ":" + id;

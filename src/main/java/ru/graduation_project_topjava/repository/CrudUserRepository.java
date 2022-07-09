@@ -6,4 +6,6 @@ import ru.graduation_project_topjava.model.User;
 
 @Transactional(readOnly = true)
 public interface CrudUserRepository extends JpaRepository<User, Long> {
+
+    User findByEmail(String email);
 }

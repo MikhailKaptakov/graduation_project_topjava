@@ -8,7 +8,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ru.graduation_project_topjava.model.Meal;
 import ru.graduation_project_topjava.model.Restaurant;
 import ru.graduation_project_topjava.service.RestaurantService;
-import ru.graduation_project_topjava.util.ValidationUtil;
+import ru.graduation_project_topjava.util.validation.ValidationUtil;
 
 import java.net.URI;
 import java.util.List;

@@ -3,16 +3,15 @@ package ru.graduation_project_topjava.model;
 import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.util.CollectionUtils;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.EnumSet;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name = "users",  uniqueConstraints = {@UniqueConstraint(columnNames = {"email"}, name = "unique_email")})
@@ -56,6 +55,11 @@ public class User extends AbstractBaseNamedEntity {
         this.roles = roles;
     }
 
+    public User(Long id, String name, String email, String password, Role... roles) {
+        this(name, email, password, roles);
+        setId(id);
+    }
+
     public User(User user) {
         this(user.id, user.name, user.email, user.password, user.roles);
     }
@@ -83,5 +87,4 @@ public class User extends AbstractBaseNamedEntity {
     public void setRoles(Collection<Role> roles) {
         this.roles = CollectionUtils.isEmpty(roles) ? EnumSet.noneOf(Role.class) : EnumSet.copyOf(roles);
     }
-
 }

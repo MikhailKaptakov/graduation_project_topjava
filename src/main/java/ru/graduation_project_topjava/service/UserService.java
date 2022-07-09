@@ -1,5 +1,8 @@
 package ru.graduation_project_topjava.service;
 
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.graduation_project_topjava.model.Restaurant;
@@ -9,12 +12,13 @@ import ru.graduation_project_topjava.repository.CrudUserRepository;
 import ru.graduation_project_topjava.repository.CrudVoteRepository;
 import ru.graduation_project_topjava.repository.DataJpaRestaurantRepository;
 import ru.graduation_project_topjava.util.exception.ConditionFailedException;
+import ru.graduation_project_topjava.web.AuthorizedUser;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 
 @Service
-public class UserService {
+public class UserService implements UserDetailsService {
 
     public static final LocalTime MAX_REVOTE_TIME = LocalTime.of(11,00);
     //todo придумать способ тестировать с заменой времени
@@ -48,4 +52,12 @@ public class UserService {
         return voteRepository.save(vote);
     }
 
+    @Override
+    public AuthorizedUser loadUserByUsername(String email) throws UsernameNotFoundException {
+        User user = userRepository.findByEmail(email.toLowerCase());
+        if (user == null) {
+            throw new UsernameNotFoundException("User " + email + " is not found");
+        }
+        return new AuthorizedUser(user);
+    }
 }
