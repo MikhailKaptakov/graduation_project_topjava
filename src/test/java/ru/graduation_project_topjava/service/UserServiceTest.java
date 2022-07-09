@@ -23,32 +23,6 @@ class UserServiceTest {
 
     @Autowired
     private UserService userService;
-
-    @Autowired
-    private CrudVoteRepository voteRepository;
-
-    @Test
-    void addVoteRevoteTest() {
-        if (LocalTime.now().isAfter(UserService.MAX_REVOTE_TIME)) {
-            assertThrows(ConditionFailedException.class,
-                    () -> {userService.addVote(UserTestData.getUser().getId(),
-                            RestaurantTestData.getNotActualRestaurant().getId());});
-        } else {
-            Vote actualVote = voteRepository.getVote(UserTestData.getUser().getId(), LocalDate.now()).orElse(null);
-            Vote expectedVote = new Vote(UserTestData.getUser(), RestaurantTestData.getNotActualRestaurant());
-            expectedVote.setId((long)152);
-            VoteTestData.VOTE_MATCHER.assertMatch(actualVote, expectedVote);
-        }
-    }
-
-    @Test
-    void addNewVote() {
-        userService.addVote(UserTestData.getUser2().getId(), RestaurantTestData.getNotActualRestaurant().getId());
-        Vote actualVote = voteRepository.getVote(UserTestData.getUser2().getId(), LocalDate.now()).orElse(null);
-        Vote expectedVote = new Vote(UserTestData.getUser2(), RestaurantTestData.getNotActualRestaurant());
-        expectedVote.setId((long)10000);
-        VoteTestData.VOTE_MATCHER.assertMatch(actualVote, expectedVote);
-    }
 }
 
    /* NotFoundException exception = assertThrows(NotFoundException.class, () -> service.update(getUpdated(), ADMIN_ID));

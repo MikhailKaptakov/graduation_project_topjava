@@ -8,16 +8,20 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.cache.CacheManager;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
-import ru.graduation_project_topjava.MealTestData;
-import ru.graduation_project_topjava.RestaurantTestData;
-import ru.graduation_project_topjava.TimingExtension;
+import ru.graduation_project_topjava.*;
 import ru.graduation_project_topjava.model.AbstractBaseEntity;
 import ru.graduation_project_topjava.model.Meal;
 import ru.graduation_project_topjava.model.Restaurant;
+import ru.graduation_project_topjava.model.Vote;
+import ru.graduation_project_topjava.repository.CrudVoteRepository;
+import ru.graduation_project_topjava.util.exception.ConditionFailedException;
 
 import javax.annotation.PostConstruct;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
 @Sql(scripts = "classpath:db/populateDB.sql", config = @SqlConfig(encoding = "UTF-8"), executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
@@ -29,6 +33,9 @@ class RestaurantServiceTest {
 
     @Autowired
     private CacheManager cacheManager;
+
+    @Autowired
+    private CrudVoteRepository voteRepository;
 
     @BeforeEach
     public void setup() {
@@ -74,6 +81,29 @@ class RestaurantServiceTest {
         expectedRestaurant.setMeals(expectedMeals);
 
         RestaurantTestData.RESTAURANT_MATCHER.assertMatch(actualRestaurant, expectedRestaurant);
+    }
+
+    @Test
+    void addVoteRevoteTest() {
+        if (LocalTime.now().isAfter(RestaurantService.MAX_REVOTE_TIME)) {
+            assertThrows(ConditionFailedException.class,
+                    () -> {restaurantService.addVote(UserTestData.getUser().getId(),
+                            RestaurantTestData.getNotActualRestaurant().getId());});
+        } else {
+            Vote actualVote = voteRepository.getVote(UserTestData.getUser().getId(), LocalDate.now()).orElse(null);
+            Vote expectedVote = new Vote(UserTestData.getUser(), RestaurantTestData.getNotActualRestaurant());
+            expectedVote.setId((long)152);
+            VoteTestData.VOTE_MATCHER.assertMatch(actualVote, expectedVote);
+        }
+    }
+
+    @Test
+    void addNewVote() {
+        restaurantService.addVote(UserTestData.getUser2().getId(), RestaurantTestData.getNotActualRestaurant().getId());
+        Vote actualVote = voteRepository.getVote(UserTestData.getUser2().getId(), LocalDate.now()).orElse(null);
+        Vote expectedVote = new Vote(UserTestData.getUser2(), RestaurantTestData.getNotActualRestaurant());
+        expectedVote.setId((long)10000);
+        VoteTestData.VOTE_MATCHER.assertMatch(actualVote, expectedVote);
     }
 
     private void setExpectedMealsParameters(List<Meal> expectedMeals, Restaurant expectedRestaurant,

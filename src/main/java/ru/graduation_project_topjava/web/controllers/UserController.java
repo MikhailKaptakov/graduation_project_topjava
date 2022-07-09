@@ -23,8 +23,6 @@ public class UserController {
     @Autowired
     private RestaurantService restaurantService;
 
-    @Autowired
-    private UserService userService;
 
     @GetMapping()
     public List<Restaurant> getActual() {
@@ -35,7 +33,7 @@ public class UserController {
     public ResponseEntity<Vote> vote(@PathVariable long id) {
         //Long userId = SecurityUtil.authUserId(); //todo add security
         Long userId = (long)100;
-        Vote created = userService.addVote(userId, id);
+        Vote created = restaurantService.addVote(userId, id);
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path(REST_URL + "/votes" + "/{id}")
                 .buildAndExpand(created.getId()).toUri();

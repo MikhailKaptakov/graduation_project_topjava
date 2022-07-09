@@ -120,7 +120,7 @@ class UserControllerTest {
         Vote expectedVote = new Vote(user, restaurant);
         expectedVote.setId((long)152);
 
-        if (LocalTime.now().isAfter(UserService.MAX_REVOTE_TIME)) {
+        if (LocalTime.now().isAfter(RestaurantService.MAX_REVOTE_TIME)) {
             ResultActions action = perform(MockMvcRequestBuilders
                     .post(REST_URL + RestaurantTestData.NOT_ACTUAL_RESTAURANT_ID)
                     /*.with(userHttpBasic(admin))*/

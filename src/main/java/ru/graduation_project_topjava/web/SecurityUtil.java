@@ -1,11 +1,10 @@
 package ru.graduation_project_topjava.web;
 
-/*import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;*/
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 
-//import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
 
-/*
 public class SecurityUtil {
 
     private SecurityUtil() {
@@ -24,11 +23,7 @@ public class SecurityUtil {
         return requireNonNull(safeGet(), "No authorized user found");
     }
 
-    public static int authUserId() {
+    public static Long authUserId() {
         return get().getUserTo().id();
     }
-
-    public static int authUserCaloriesPerDay() {
-        return get().getUserTo().getCaloriesPerDay();
-    }
-}*/
+}

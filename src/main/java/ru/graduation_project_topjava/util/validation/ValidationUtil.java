@@ -1,5 +1,6 @@
 package ru.graduation_project_topjava.util.validation;
 
+import ru.graduation_project_topjava.HasId;
 import ru.graduation_project_topjava.model.AbstractBaseEntity;
 import ru.graduation_project_topjava.util.exception.NotFoundException;
 
@@ -8,12 +9,12 @@ public class ValidationUtil {
     private ValidationUtil() {
     }
 
-    public static <T> T checkNotFoundWithId(T object, int id) {
+    public static <T> T checkNotFoundWithId(T object, long id) {
         checkNotFoundWithId(object != null, id);
         return object;
     }
 
-    public static void checkNotFoundWithId(boolean found, int id) {
+    public static void checkNotFoundWithId(boolean found, long id) {
         checkNotFound(found, "id=" + id);
     }
 
@@ -28,7 +29,7 @@ public class ValidationUtil {
         }
     }
 
-    public static void checkNew(AbstractBaseEntity entity) {
+    public static void checkNew(HasId entity) {
         if (!entity.itsNew()) {
             throw new IllegalArgumentException(entity + " must be new (id=null)");
         }
