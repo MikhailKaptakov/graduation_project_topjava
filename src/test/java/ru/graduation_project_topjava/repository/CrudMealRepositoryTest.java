@@ -14,7 +14,8 @@ import java.time.LocalDate;
 import java.util.List;
 
 @SpringBootTest
-@Sql(scripts = "classpath:db/populateDB.sql", config = @SqlConfig(encoding = "UTF-8"), executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+@Sql(scripts = "classpath:db/populateDB.sql", config = @SqlConfig(encoding = "UTF-8"),
+        executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 @ExtendWith(TimingExtension.class)
 class CrudMealRepositoryTest {
 

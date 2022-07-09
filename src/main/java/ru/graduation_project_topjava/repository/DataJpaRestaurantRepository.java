@@ -1,7 +1,6 @@
 package ru.graduation_project_topjava.repository;
 
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 import ru.graduation_project_topjava.model.Meal;
 import ru.graduation_project_topjava.model.Restaurant;
 import ru.graduation_project_topjava.model.Vote;

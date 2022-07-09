@@ -1,6 +1,5 @@
 package ru.graduation_project_topjava;
 
-import ru.graduation_project_topjava.model.AbstractBaseEntity;
 import ru.graduation_project_topjava.model.AbstractBaseNamedEntity;
 import ru.graduation_project_topjava.model.Meal;
 import ru.graduation_project_topjava.model.Restaurant;
@@ -33,10 +32,10 @@ public class MealTestData {
         actualRestaurantNotActualMeal4.setId(FIRST_MEAL_ID + 5);
         notActualRestaurantMeal1.setRestaurant(RestaurantTestData.getNotActualRestaurant());
         notActualRestaurantMeal2.setRestaurant(RestaurantTestData.getNotActualRestaurant());
-        actualRestaurantActualMeal1.setRestaurant(RestaurantTestData.getActualRestaurant());
-        actualRestaurantActualMeal2.setRestaurant(RestaurantTestData.getActualRestaurant());
-        actualRestaurantNotActualMeal3.setRestaurant(RestaurantTestData.getActualRestaurant());
-        actualRestaurantNotActualMeal4.setRestaurant(RestaurantTestData.getActualRestaurant());
+        actualRestaurantActualMeal1.setRestaurant(RestaurantTestData.getActualWithMealsAndVotesRestaurant());
+        actualRestaurantActualMeal2.setRestaurant(RestaurantTestData.getActualWithMealsAndVotesRestaurant());
+        actualRestaurantNotActualMeal3.setRestaurant(RestaurantTestData.getActualWithMealsAndVotesRestaurant());
+        actualRestaurantNotActualMeal4.setRestaurant(RestaurantTestData.getActualWithMealsAndVotesRestaurant());
         notActualRestaurantMeal1.setMealDate(AbstractBaseNamedEntity.MIN);
         notActualRestaurantMeal2.setMealDate(AbstractBaseNamedEntity.MIN);
         actualRestaurantNotActualMeal3.setMealDate(AbstractBaseNamedEntity.MIN);

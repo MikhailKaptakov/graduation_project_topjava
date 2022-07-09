@@ -31,7 +31,7 @@ class DataJpaRestaurantRepositoryTest {
     @Test
     void getAllActual() {
         List<Restaurant> restaurants = restaurantRepository.getAllActual();
-        RestaurantTestData.RESTAURANT_MATCHER.assertMatch(restaurants, RestaurantTestData.getActualRestaurant());
+        RestaurantTestData.RESTAURANT_MATCHER.assertMatch(restaurants, RestaurantTestData.getActualWithMealsAndVotesRestaurant());
     }
 
     @Test
@@ -44,7 +44,7 @@ class DataJpaRestaurantRepositoryTest {
 
     @Test
     void saveAndFlushUpdateRestaurant() {
-        Restaurant expected = RestaurantTestData.getActualRestaurant();
+        Restaurant expected = RestaurantTestData.getActualWithMealsAndVotesRestaurant();
         expected.setName("new name");
         Restaurant actual = restaurantRepository.saveAndFlush(expected);
         RestaurantTestData.IGNORE_FIELDS_RESTAURANT_MATCHER.assertMatch(actual, expected);

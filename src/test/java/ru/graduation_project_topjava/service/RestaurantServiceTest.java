@@ -16,7 +16,6 @@ import ru.graduation_project_topjava.model.Vote;
 import ru.graduation_project_topjava.repository.CrudVoteRepository;
 import ru.graduation_project_topjava.util.exception.ConditionFailedException;
 
-import javax.annotation.PostConstruct;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
@@ -45,7 +44,7 @@ class RestaurantServiceTest {
     @Test
     public void getAllActual() {
         List<Restaurant> allActual = restaurantService.getAllActual();
-        RestaurantTestData.RESTAURANT_MATCHER.assertMatch(allActual, RestaurantTestData.getActualRestaurant());
+        RestaurantTestData.RESTAURANT_MATCHER.assertMatch(allActual, RestaurantTestData.getActualWithMealsAndVotesRestaurant());
     }
 
     @Test

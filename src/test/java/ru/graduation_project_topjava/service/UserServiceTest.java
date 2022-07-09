@@ -23,6 +23,8 @@ class UserServiceTest {
 
     @Autowired
     private UserService userService;
+
+    //todo tests
 }
 
    /* NotFoundException exception = assertThrows(NotFoundException.class, () -> service.update(getUpdated(), ADMIN_ID));

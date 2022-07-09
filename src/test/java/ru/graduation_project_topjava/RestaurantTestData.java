@@ -27,13 +27,18 @@ public class RestaurantTestData {
         notActualRestaurant.setId(NOT_ACTUAL_RESTAURANT_ID);
         actualRestaurant.setId(ACTUAL_RESTAURANT_ID);
         actualRestaurant.setLastUpdateDate(LocalDate.now());
-        actualRestaurant.setMeals(MealTestData.getActualRestaurantActualMeals());
-        actualRestaurant.setVotes(VoteTestData.getActualRestaurant2Votes());
         newRestaurant.setLastUpdateDate(Restaurant.MIN);
     }
 
     public static Restaurant getNewRestaurant() {
         return new Restaurant(newRestaurant);
+    }
+
+    public static Restaurant getActualWithMealsAndVotesRestaurant() {
+        Restaurant restaurant = new Restaurant(actualRestaurant);
+        restaurant.setMeals(MealTestData.getActualRestaurantActualMeals());
+        restaurant.setVotes(VoteTestData.getActualRestaurant2Votes());
+        return restaurant;
     }
 
     public static Restaurant getActualRestaurant() {

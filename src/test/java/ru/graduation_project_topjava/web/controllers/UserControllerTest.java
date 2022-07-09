@@ -21,7 +21,6 @@ import ru.graduation_project_topjava.*;
 import ru.graduation_project_topjava.model.*;
 import ru.graduation_project_topjava.repository.CrudVoteRepository;
 import ru.graduation_project_topjava.service.RestaurantService;
-import ru.graduation_project_topjava.service.UserService;
 import ru.graduation_project_topjava.web.json.JsonUtil;
 
 import javax.annotation.PostConstruct;
@@ -30,11 +29,12 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
+import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static ru.graduation_project_topjava.TestUtil.userHttpBasic;
 
-@Transactional
 @SpringBootTest
 @Sql(scripts = "classpath:db/populateDB.sql", config = @SqlConfig(encoding = "UTF-8"), executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 @ExtendWith(TimingExtension.class)
@@ -74,13 +74,13 @@ class UserControllerTest {
         mockMvc = MockMvcBuilders
                 .webAppContextSetup(webApplicationContext)
                 .addFilter(CHARACTER_ENCODING_FILTER)
-                /*.apply(springSecurity())*/
+                .apply(springSecurity())
                 .build();
     }
 
     @Test
     void getActual() throws Exception {
-        Restaurant expected = RestaurantTestData.getActualRestaurant();
+        Restaurant expected = RestaurantTestData.getActualWithMealsAndVotesRestaurant();
         List<Meal> expectedMeal = MealTestData.getAllActualMeals();
         List<Vote> expectedVotes = VoteTestData.getActualRestaurant2Votes();
         expected.setMeals(expectedMeal);
@@ -100,10 +100,9 @@ class UserControllerTest {
         expectedVote.setId((long)AbstractBaseEntity.START_SEQ);
 
         ResultActions action = perform(MockMvcRequestBuilders
-                .post(REST_URL+RestaurantTestData.NOT_ACTUAL_RESTAURANT_ID)
+                .post(REST_URL + RestaurantTestData.NOT_ACTUAL_RESTAURANT_ID)
                 .contentType(MediaType.APPLICATION_JSON)
-                /*.with(userHttpBasic(admin))*/
-                .content(JsonUtil.writeValue(expectedVote)))
+                .with(userHttpBasic(user)))
                 .andExpect(status().isCreated());
 
         Vote created = VoteTestData.VOTE_MATCHER.readFromJson(action);
@@ -123,7 +122,7 @@ class UserControllerTest {
         if (LocalTime.now().isAfter(RestaurantService.MAX_REVOTE_TIME)) {
             ResultActions action = perform(MockMvcRequestBuilders
                     .post(REST_URL + RestaurantTestData.NOT_ACTUAL_RESTAURANT_ID)
-                    /*.with(userHttpBasic(admin))*/
+                    .with(userHttpBasic(UserTestData.getUser()))
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(JsonUtil.writeValue(expectedVote)))
                     .andDo(print())
@@ -132,7 +131,7 @@ class UserControllerTest {
             ResultActions action = perform(MockMvcRequestBuilders
                     .post(REST_URL+RestaurantTestData.NOT_ACTUAL_RESTAURANT_ID)
                     .contentType(MediaType.APPLICATION_JSON)
-                    /*.with(userHttpBasic(admin))*/
+                    .with(userHttpBasic(UserTestData.getUser()))
                     .content(JsonUtil.writeValue(expectedVote)))
                     .andExpect(status().isCreated());
 

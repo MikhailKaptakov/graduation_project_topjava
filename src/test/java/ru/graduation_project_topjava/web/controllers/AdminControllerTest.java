@@ -20,6 +20,7 @@ import org.springframework.web.filter.CharacterEncodingFilter;
 import ru.graduation_project_topjava.MealTestData;
 import ru.graduation_project_topjava.RestaurantTestData;
 import ru.graduation_project_topjava.TimingExtension;
+import ru.graduation_project_topjava.UserTestData;
 import ru.graduation_project_topjava.model.AbstractBaseEntity;
 import ru.graduation_project_topjava.model.Meal;
 import ru.graduation_project_topjava.model.Restaurant;
@@ -32,8 +33,10 @@ import javax.annotation.PostConstruct;
 import java.time.LocalDate;
 import java.util.List;
 
+import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static ru.graduation_project_topjava.TestUtil.userHttpBasic;
 
 @Transactional
 @SpringBootTest
@@ -67,7 +70,7 @@ class AdminControllerTest {
         mockMvc = MockMvcBuilders
                 .webAppContextSetup(webApplicationContext)
                 .addFilter(CHARACTER_ENCODING_FILTER)
-                /*.apply(springSecurity())*/
+                .apply(springSecurity())
                 .build();
     }
 
@@ -87,7 +90,7 @@ class AdminControllerTest {
         newRestaurant.setMeals(newMeals);
         ResultActions action = perform(MockMvcRequestBuilders.post(REST_URL)
                 .contentType(MediaType.APPLICATION_JSON)
-                /*.with(userHttpBasic(admin))*/
+                .with(userHttpBasic(UserTestData.getAdmin()))
                 .content(JsonUtil.writeValue(newRestaurant)))
                 .andExpect(status().isCreated());
 
@@ -110,7 +113,7 @@ class AdminControllerTest {
         ResultActions action = perform(MockMvcRequestBuilders
                 .post(REST_URL + RestaurantTestData.NOT_ACTUAL_RESTAURANT_ID)
                 .contentType(MediaType.APPLICATION_JSON)
-                /*.with(userHttpBasic(admin))*/
+                .with(userHttpBasic(UserTestData.getAdmin()))
                 .content(JsonUtil.writeValue(newMeals)))
                 .andExpect(status().isCreated());
 
