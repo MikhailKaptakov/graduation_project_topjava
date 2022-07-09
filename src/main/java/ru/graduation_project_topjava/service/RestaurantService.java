@@ -1,5 +1,7 @@
 package ru.graduation_project_topjava.service;
 
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.graduation_project_topjava.model.Meal;
@@ -24,6 +26,7 @@ public class RestaurantService {
         this.mealRepository = mealRepository;
     }
 
+    @Cacheable("actual_restaurants")
     public List<Restaurant> getAllActual() {
         return restaurantRepository.getAllActual();
     }
@@ -33,6 +36,7 @@ public class RestaurantService {
     }
 
     @Transactional
+    @CacheEvict(value = "actual_restaurants", allEntries = true)
     public Restaurant createOrUpdateWithMeals(List<Meal> newActualMeals, Restaurant restaurant) {
         MealUtil.checkMealsIsNew(newActualMeals);
         Restaurant restaurantWithUpdatedLastUpdateDateField;

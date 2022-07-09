@@ -29,7 +29,7 @@ class UserServiceTest {
 
     @Test
     void addVoteRevoteTest() {
-        if (LocalTime.now().isAfter(UserService.maxRevoteTime)) {
+        if (LocalTime.now().isAfter(UserService.MAX_REVOTE_TIME)) {
             assertThrows(ConditionFailedException.class,
                     () -> {userService.addVote(UserTestData.getUser().getId(),
                             RestaurantTestData.getNotActualRestaurant().getId());});
@@ -50,3 +50,16 @@ class UserServiceTest {
         VoteTestData.VOTE_MATCHER.assertMatch(actualVote, expectedVote);
     }
 }
+
+   /* NotFoundException exception = assertThrows(NotFoundException.class, () -> service.update(getUpdated(), ADMIN_ID));
+        Assertions.assertEquals("Not found entity with id=" + MEAL1_ID, exception.getMessage());*/
+    //todo образец кода при ожидании эксепшен в тесте в junit 5. Добавит ьтесты на эксепшн
+  /* protected <T extends Throwable> void validateRootCause(Class<T> rootExceptionClass, Runnable runnable) {
+       assertThrows(rootExceptionClass, () -> {
+           try {
+               runnable.run();
+           } catch (Exception e) {
+               throw getRootCause(e);
+           }
+       });
+   }*/

@@ -1,9 +1,11 @@
 package ru.graduation_project_topjava.web.controllers;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.cache.CacheManager;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
@@ -18,6 +20,7 @@ import org.springframework.web.filter.CharacterEncodingFilter;
 import ru.graduation_project_topjava.*;
 import ru.graduation_project_topjava.model.*;
 import ru.graduation_project_topjava.repository.CrudVoteRepository;
+import ru.graduation_project_topjava.service.RestaurantService;
 import ru.graduation_project_topjava.service.UserService;
 import ru.graduation_project_topjava.web.json.JsonUtil;
 
@@ -49,10 +52,18 @@ class UserControllerTest {
     private MockMvc mockMvc;
 
     @Autowired
+    private CacheManager cacheManager;
+
+    @Autowired
     private WebApplicationContext webApplicationContext;
 
     @Autowired
     private CrudVoteRepository voteRepository;
+
+    @BeforeEach
+    public void setup() {
+        cacheManager.getCache("actual_restaurants").clear();
+    }
 
     private ResultActions perform(MockHttpServletRequestBuilder builder) throws Exception {
         return mockMvc.perform(builder);
@@ -109,7 +120,7 @@ class UserControllerTest {
         Vote expectedVote = new Vote(user, restaurant);
         expectedVote.setId((long)152);
 
-        if (LocalTime.now().isAfter(UserService.maxRevoteTime)) {
+        if (LocalTime.now().isAfter(UserService.MAX_REVOTE_TIME)) {
             ResultActions action = perform(MockMvcRequestBuilders
                     .post(REST_URL + RestaurantTestData.NOT_ACTUAL_RESTAURANT_ID)
                     /*.with(userHttpBasic(admin))*/

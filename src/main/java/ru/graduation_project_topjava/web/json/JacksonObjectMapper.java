@@ -32,7 +32,17 @@ public class JacksonObjectMapper extends ObjectMapper {
         setSerializationInclusion(JsonInclude.Include.NON_NULL);
     }
 
+    public JacksonObjectMapper(ObjectMapper src) {
+        super(src);
+    }
+
     public static ObjectMapper getMapper() {
         return MAPPER;
+    }
+
+    @Override
+    public ObjectMapper copy() {
+        this._checkInvalidCopy(JacksonObjectMapper.class);
+        return new JacksonObjectMapper(this);
     }
 }

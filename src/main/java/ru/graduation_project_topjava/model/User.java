@@ -1,5 +1,6 @@
 package ru.graduation_project_topjava.model;
 
+import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.util.CollectionUtils;
@@ -35,6 +36,7 @@ public class User extends AbstractBaseNamedEntity {
     @ElementCollection(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
+    @BatchSize(size = 200)
     private Set<Role> roles;
 
     public User() {

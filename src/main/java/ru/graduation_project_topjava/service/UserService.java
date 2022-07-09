@@ -2,7 +2,6 @@ package ru.graduation_project_topjava.service;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.Assert;
 import ru.graduation_project_topjava.model.Restaurant;
 import ru.graduation_project_topjava.model.User;
 import ru.graduation_project_topjava.model.Vote;
@@ -17,7 +16,7 @@ import java.time.LocalTime;
 @Service
 public class UserService {
 
-    public static final LocalTime maxRevoteTime = LocalTime.of(11,00);
+    public static final LocalTime MAX_REVOTE_TIME = LocalTime.of(11,00);
     //todo придумать способ тестировать с заменой времени
     private final CrudVoteRepository voteRepository;
 
@@ -36,7 +35,7 @@ public class UserService {
     public Vote addVote(Long userId, Long restaurantId) {
         Vote vote = voteRepository.getVote(userId, LocalDate.now()).orElse(null);
         if (vote != null) {
-            if (LocalTime.now().isAfter(maxRevoteTime)) {
+            if (LocalTime.now().isAfter(MAX_REVOTE_TIME)) {
                 throw new ConditionFailedException("Time over 11 hours. You can't revote");
             }
             Restaurant restaurant = restaurantRepository.findById(restaurantId);
