@@ -21,18 +21,4 @@ public class GraduationProjectTopjavaApplication {
         SpringApplication.run(GraduationProjectTopjavaApplication.class, args);
     }
 
-    @Bean
-    @Primary
-    public ObjectMapper objectMapper() {
-        return JacksonObjectMapper.getMapper();
-    }
-
-    @Bean
-    @Primary
-    public HttpMessageConverter<Object> createMappingJackson2HttpMessageConverter() {
-        return new MappingJackson2HttpMessageConverter(objectMapper());
-    }
-
-
-
 }

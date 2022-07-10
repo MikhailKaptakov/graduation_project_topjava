@@ -29,10 +29,12 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static ru.graduation_project_topjava.TestUtil.userAuth;
 import static ru.graduation_project_topjava.TestUtil.userHttpBasic;
 
 @SpringBootTest
@@ -102,7 +104,9 @@ class UserControllerTest {
         ResultActions action = perform(MockMvcRequestBuilders
                 .post(REST_URL + RestaurantTestData.NOT_ACTUAL_RESTAURANT_ID)
                 .contentType(MediaType.APPLICATION_JSON)
-                .with(userHttpBasic(user)))
+                .with(userAuth(user))
+                .with(csrf().asHeader()))
+                .andDo(print())
                 .andExpect(status().isCreated());
 
         Vote created = VoteTestData.VOTE_MATCHER.readFromJson(action);
@@ -122,11 +126,12 @@ class UserControllerTest {
         if (LocalTime.now().isAfter(RestaurantService.MAX_REVOTE_TIME)) {
             ResultActions action = perform(MockMvcRequestBuilders
                     .post(REST_URL + RestaurantTestData.NOT_ACTUAL_RESTAURANT_ID)
-                    .with(userHttpBasic(UserTestData.getUser()))
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(JsonUtil.writeValue(expectedVote)))
+                    .with(userAuth(user))
+                    .with(csrf().asHeader()))
                     .andDo(print())
                     .andExpect(status().is4xxClientError());
+            //todo исправить исключенние обработкой
         } else {
             ResultActions action = perform(MockMvcRequestBuilders
                     .post(REST_URL+RestaurantTestData.NOT_ACTUAL_RESTAURANT_ID)

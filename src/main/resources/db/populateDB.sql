@@ -19,9 +19,9 @@ VALUES ('20','old soup','0001-01-01', '500', '1'),
        ('25','old tea','0001-01-01', '5500', '2');
 
 INSERT INTO USERS (ID, NAME, EMAIL, PASSWORD)
-VALUES ('100','User', 'userMail@test.test', '{noop}userPassword'),
-       ('101','Admin', 'adminMail@test.test', '{noop}adminPassword'),
-       ('102','User2', 'user2Mail@test.test', '{noop}user2Password');
+VALUES ('100','User', 'usermail@test.test', '{noop}userPassword'),
+       ('101','Admin', 'adminmail@test.test', '{noop}adminPassword'),
+       ('102','User2', 'user2mail@test.test', '{noop}user2Password');
 
 INSERT INTO USER_ROLES (USER_ID, ROLE)
 VALUES (100, 'USER'),

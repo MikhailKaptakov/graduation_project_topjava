@@ -7,6 +7,8 @@ import org.springframework.test.web.servlet.request.RequestPostProcessor;
 import ru.graduation_project_topjava.model.User;
 import ru.graduation_project_topjava.web.AuthorizedUser;
 
+import java.util.Locale;
+
 public class TestUtil {
 
     public static void mockAuthorize(User user) {

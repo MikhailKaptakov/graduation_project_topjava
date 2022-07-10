@@ -33,9 +33,11 @@ import javax.annotation.PostConstruct;
 import java.time.LocalDate;
 import java.util.List;
 
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static ru.graduation_project_topjava.TestUtil.userAuth;
 import static ru.graduation_project_topjava.TestUtil.userHttpBasic;
 
 @Transactional
@@ -76,7 +78,9 @@ class AdminControllerTest {
 
     @Test
     void getNotActual() throws Exception {
-        perform(MockMvcRequestBuilders.get(REST_URL))
+        perform(MockMvcRequestBuilders.get(REST_URL)
+                .with(userAuth(UserTestData.getAdmin()))
+                .with(csrf().asHeader()))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(RestaurantTestData.IGNORE_FIELDS_RESTAURANT_MATCHER
@@ -90,7 +94,8 @@ class AdminControllerTest {
         newRestaurant.setMeals(newMeals);
         ResultActions action = perform(MockMvcRequestBuilders.post(REST_URL)
                 .contentType(MediaType.APPLICATION_JSON)
-                .with(userHttpBasic(UserTestData.getAdmin()))
+                .with(userAuth(UserTestData.getAdmin()))
+                .with(csrf().asHeader())
                 .content(JsonUtil.writeValue(newRestaurant)))
                 .andExpect(status().isCreated());
 
@@ -113,7 +118,8 @@ class AdminControllerTest {
         ResultActions action = perform(MockMvcRequestBuilders
                 .post(REST_URL + RestaurantTestData.NOT_ACTUAL_RESTAURANT_ID)
                 .contentType(MediaType.APPLICATION_JSON)
-                .with(userHttpBasic(UserTestData.getAdmin()))
+                .with(userAuth(UserTestData.getAdmin()))
+                .with(csrf().asHeader())
                 .content(JsonUtil.writeValue(newMeals)))
                 .andExpect(status().isCreated());
 

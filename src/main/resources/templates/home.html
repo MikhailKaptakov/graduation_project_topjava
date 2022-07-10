@@ -1,18 +1,19 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Graduation project</title>
 </head>
 <body>
-<h3>Graduation Project </a></h3>
+<h3>Graduation Project</h3>
 <nav class="nav">
-    <a href=registration.html class="nav-element this-page">Registration</a>
-    <!--<a href=pattern.html class="nav-element">шаблон2</a>
-    <a href=pattern.html class="nav-element">шаблон3</a>
-    <a href=pattern.html class="nav-element">шаблон4</a>
-    <a href=pattern.html class="nav-element">шаблон5</a>-->
+    <a th:href="@{/register}" class="nav-element this-page">Registration</a>
+    <a th:href="@{/login}" class="nav-element this-page">Login</a>
 </nav>
+<form method="POST" th:action="@{/logout}">
+    <input type="submit" value="Logout"/>
+</form>
+
 </body>
 </html>
 
