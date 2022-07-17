@@ -1,9 +1,7 @@
-package ru.graduation_project_topjava.web.controllers;
+package ru.graduation_project_topjava.web.controllers.rest;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
@@ -11,6 +9,7 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -25,7 +24,6 @@ import ru.graduation_project_topjava.model.AbstractBaseEntity;
 import ru.graduation_project_topjava.model.Meal;
 import ru.graduation_project_topjava.model.Restaurant;
 import ru.graduation_project_topjava.repository.DataJpaRestaurantRepository;
-import ru.graduation_project_topjava.service.RestaurantService;
 import ru.graduation_project_topjava.web.json.JsonUtil;
 
 import javax.annotation.PostConstruct;
@@ -38,7 +36,6 @@ import static org.springframework.security.test.web.servlet.setup.SecurityMockMv
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static ru.graduation_project_topjava.TestUtil.userAuth;
-import static ru.graduation_project_topjava.TestUtil.userHttpBasic;
 
 @Transactional
 @SpringBootTest
@@ -92,12 +89,8 @@ class AdminControllerTest {
         List<Meal> newMeals = MealTestData.getNewRestaurantMeals();
         Restaurant newRestaurant = RestaurantTestData.getNewRestaurant();
         newRestaurant.setMeals(newMeals);
-        ResultActions action = perform(MockMvcRequestBuilders.post(REST_URL)
-                .contentType(MediaType.APPLICATION_JSON)
-                .with(userAuth(UserTestData.getAdmin()))
-                .with(csrf().asHeader())
-                .content(JsonUtil.writeValue(newRestaurant)))
-                .andExpect(status().isCreated());
+
+        ResultActions action = getResultActions(REST_URL, JsonUtil.writeValue(newRestaurant), status().isCreated());
 
         Restaurant created = RestaurantTestData.RESTAURANT_MATCHER.readFromJson(action);
 
@@ -111,17 +104,49 @@ class AdminControllerTest {
     }
 
     @Test
+    void createIllegalMealWithIdRestaurantWithMeals() throws Exception {
+        Meal newMeal = new Meal("illegalNew", 100);
+        newMeal.setId((long)1);
+        List<Meal> newMeals = List.of(newMeal);
+        Restaurant newRestaurant = RestaurantTestData.getNewRestaurant();
+        newRestaurant.setMeals(newMeals);
+        getResultActions(REST_URL, JsonUtil.writeValue(newRestaurant), status().isUnprocessableEntity());
+    }
+
+    @Test
+    void createIllegalMealWithNegativePriceRestaurantWithMeals() throws Exception {
+        Meal newMeal = new Meal("illegalNew", -100);
+        List<Meal> newMeals = List.of(newMeal);
+        Restaurant newRestaurant = RestaurantTestData.getNewRestaurant();
+        newRestaurant.setMeals(newMeals);
+        getResultActions(REST_URL, JsonUtil.writeValue(newRestaurant), status().isUnprocessableEntity());
+    }
+
+    @Test
+    void createNotNewRestaurantWithMeals() throws Exception {
+        List<Meal> newMeals = MealTestData.getNewRestaurantMeals();
+        Restaurant newRestaurant = RestaurantTestData.getNewRestaurant();
+        newRestaurant.setId((long) 1);
+        newRestaurant.setMeals(newMeals);
+        getResultActions(REST_URL, JsonUtil.writeValue(newRestaurant), status().isUnprocessableEntity());
+    }
+
+    @Test
+    void createIllegalRestaurantWithMeals() throws Exception {
+        List<Meal> newMeals = MealTestData.getNewRestaurantMeals();
+        Restaurant newRestaurant = RestaurantTestData.getNewRestaurant();
+        newRestaurant.setName("");
+        newRestaurant.setMeals(newMeals);
+        getResultActions(REST_URL, JsonUtil.writeValue(newRestaurant), status().isUnprocessableEntity());
+    }
+
+    @Test
     void addMealsMenu() throws Exception{
         List<Meal> newMeals = MealTestData.getNewRestaurantMeals();
         Restaurant notActualRestaurant = RestaurantTestData.getNotActualRestaurant();
         notActualRestaurant.setMeals(newMeals);
-        ResultActions action = perform(MockMvcRequestBuilders
-                .post(REST_URL + RestaurantTestData.NOT_ACTUAL_RESTAURANT_ID)
-                .contentType(MediaType.APPLICATION_JSON)
-                .with(userAuth(UserTestData.getAdmin()))
-                .with(csrf().asHeader())
-                .content(JsonUtil.writeValue(newMeals)))
-                .andExpect(status().isCreated());
+        ResultActions action = getResultActions(REST_URL + RestaurantTestData.NOT_ACTUAL_RESTAURANT_ID,
+                JsonUtil.writeValue(newMeals), status().isCreated());
 
         Restaurant created = RestaurantTestData.RESTAURANT_MATCHER.readFromJson(action);
 
@@ -134,5 +159,29 @@ class AdminControllerTest {
                             notActualRestaurant);
     }
 
-    //todo add test to no valid data
+    @Test
+    void addIllegalMealWithNegativePriceMenu() throws Exception {
+        Meal newMeal = new Meal("illegalNew", -100);
+        List<Meal> newMeals = List.of(newMeal);
+        Restaurant notActualRestaurant = RestaurantTestData.getNotActualRestaurant();
+        notActualRestaurant.setMeals(newMeals);
+        getResultActions(REST_URL + RestaurantTestData.NOT_ACTUAL_RESTAURANT_ID,
+                JsonUtil.writeValue(newMeals),
+                status().isUnprocessableEntity());
+    }
+
+    private ResultActions getResultActions( String url, String json, ResultMatcher status) throws Exception {
+        ResultActions action = perform(MockMvcRequestBuilders.post(url)
+                .contentType(MediaType.APPLICATION_JSON)
+                .with(userAuth(UserTestData.getAdmin()))
+                .with(csrf().asHeader())
+                .content(json))
+                .andExpect(status);
+        return action;
+    }
+
+    //todo рефактор тестов контроллеров, добавить абстрактный класс тестовый
+    //todo добавить ридми
+    //todo добавить соап юай тесты
+    //todo добавить сваггер
 }

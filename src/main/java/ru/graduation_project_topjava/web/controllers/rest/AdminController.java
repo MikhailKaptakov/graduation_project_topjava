@@ -1,8 +1,9 @@
-package ru.graduation_project_topjava.web.controllers;
+package ru.graduation_project_topjava.web.controllers.rest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ru.graduation_project_topjava.model.Meal;
@@ -10,9 +11,11 @@ import ru.graduation_project_topjava.model.Restaurant;
 import ru.graduation_project_topjava.service.RestaurantService;
 import ru.graduation_project_topjava.util.validation.ValidationUtil;
 
+import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
 
+@Validated
 @RestController
 @RequestMapping(value = AdminController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 public class AdminController {
@@ -28,13 +31,15 @@ public class AdminController {
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Restaurant> createRestaurantWithMeals(@RequestBody Restaurant restaurantWithMeals) {
-        ValidationUtil.checkNew(restaurantWithMeals);
-        return saveRestaurant(restaurantWithMeals.getMeals(), restaurantWithMeals);
+    public ResponseEntity<Restaurant> createRestaurant(@Valid @RequestBody Restaurant restaurant) {
+        ValidationUtil.checkNew(restaurant);
+        return saveRestaurant(restaurant.getMeals(), restaurant);
     }
 
+
+
     @PostMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Restaurant> addMealsMenu(@RequestBody List<Meal> meals, @PathVariable long id) {
+    public ResponseEntity<Restaurant> addMealsMenu(@RequestBody List< @Valid Meal> meals, @PathVariable long id) {
         Restaurant restaurant = new Restaurant();
         restaurant.setId(id);
         return saveRestaurant(meals, restaurant);

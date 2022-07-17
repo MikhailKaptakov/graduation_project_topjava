@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
 import javax.persistence.*;
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -21,12 +22,15 @@ public class Restaurant extends AbstractBaseNamedEntity{
     private LocalDate lastUpdateDate;
 
     @Transient
+    @Valid
     private List<Meal> meals;
 
     @Transient
+    @Valid
     private List<Vote> votes;
 
     public Restaurant() {
+        this.lastUpdateDate = MIN;
         this.meals = new ArrayList<>();
         this.votes = new ArrayList<>();
     }

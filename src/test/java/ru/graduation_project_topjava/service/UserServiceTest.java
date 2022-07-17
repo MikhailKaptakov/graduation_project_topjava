@@ -24,18 +24,19 @@ class UserServiceTest {
     @Autowired
     private UserService userService;
 
-    //todo tests
-}
+    @Test
+    void create() {
+        //todo
+    }
 
-   /* NotFoundException exception = assertThrows(NotFoundException.class, () -> service.update(getUpdated(), ADMIN_ID));
-        Assertions.assertEquals("Not found entity with id=" + MEAL1_ID, exception.getMessage());*/
-    //todo образец кода при ожидании эксепшен в тесте в junit 5. Добавит ьтесты на эксепшн
-  /* protected <T extends Throwable> void validateRootCause(Class<T> rootExceptionClass, Runnable runnable) {
-       assertThrows(rootExceptionClass, () -> {
-           try {
-               runnable.run();
-           } catch (Exception e) {
-               throw getRootCause(e);
-           }
-       });
-   }*/
+    @Test
+    void loadUserByUsername() {
+        //todo
+    }
+
+    @Test
+    void getUser() {
+        //todo
+    }
+
+}

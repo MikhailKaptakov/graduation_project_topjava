@@ -24,7 +24,7 @@ class CrudVoteRepositoryTest {
     @Test
     void findAllByDate() {
         List<Vote> actual = voteRepository.findAllByDate(LocalDate.now());
-        List<Vote> expected = VoteTestData.getActualRestaurant2Votes();
+        List<Vote> expected = VoteTestData.getActualRestaurantVotes();
         VoteTestData.VOTE_MATCHER.assertMatch(actual, expected);
         checkVotesIdFields(actual, expected);
     }
@@ -42,13 +42,13 @@ class CrudVoteRepositoryTest {
 
     @Test
     void getActualVote() {
-        Vote vote = voteRepository.getVote(UserTestData.USER_ID, LocalDate.now()).orElse(null);
+        Vote vote = voteRepository.getActualUserVote(UserTestData.USER_ID, LocalDate.now()).orElse(null);
         VoteTestData.VOTE_MATCHER.assertMatch(vote,VoteTestData.getActualVote1UserActualRestaurant());
     }
 
     @Test
     void getNullVote() {
-        Vote vote = voteRepository.getVote(UserTestData.USER2_ID, LocalDate.now()).orElse(null);
+        Vote vote = voteRepository.getActualUserVote(UserTestData.USER2_ID, LocalDate.now()).orElse(null);
         VoteTestData.VOTE_MATCHER.assertMatch(vote,null);
     }
 }

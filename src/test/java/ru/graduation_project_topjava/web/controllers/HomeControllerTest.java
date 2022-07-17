@@ -36,6 +36,6 @@ class HomeControllerTest {
     void home() throws Exception{
         mockMvc.perform(get("/"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("home"));
+                .andExpect(forwardedUrl("/home"));
     }
 }

@@ -31,7 +31,8 @@ class DataJpaRestaurantRepositoryTest {
     @Test
     void getAllActual() {
         List<Restaurant> restaurants = restaurantRepository.getAllActual();
-        RestaurantTestData.RESTAURANT_MATCHER.assertMatch(restaurants, RestaurantTestData.getActualWithMealsAndVotesRestaurant());
+        RestaurantTestData.RESTAURANT_MATCHER.assertMatch(restaurants,
+                RestaurantTestData.getActualWithMealsAndVotes());
     }
 
     @Test
@@ -57,4 +58,17 @@ class DataJpaRestaurantRepositoryTest {
         RestaurantTestData.IGNORE_FIELDS_RESTAURANT_MATCHER.assertMatch(actual, expected);
     }
 
+    @Test
+    void findActualById() {
+        Restaurant expected = RestaurantTestData.getActualRestaurant();
+        Restaurant actual = restaurantRepository.findActualById(expected.getId());
+        RestaurantTestData.IGNORE_FIELDS_RESTAURANT_MATCHER.assertMatch(actual, expected);
+    }
+
+    @Test
+    void findActualByIdNotFound() {
+        Restaurant expected = RestaurantTestData.getNotActualRestaurant();
+        Restaurant actual = restaurantRepository.findActualById(expected.getId());
+        RestaurantTestData.IGNORE_FIELDS_RESTAURANT_MATCHER.assertMatch(actual, null);
+    }
 }

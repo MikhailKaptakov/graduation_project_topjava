@@ -39,6 +39,7 @@ public class UserService implements UserDetailsService {
     }
 
     private User prepareAndSave(User user) {
+        ValidationUtil.checkNew(user);
         return userRepository.save(UserUtil.prepareToSave(user, passwordEncoder));
     }
 

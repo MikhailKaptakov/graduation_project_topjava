@@ -8,6 +8,7 @@ import ru.graduation_project_topjava.model.Restaurant;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Transactional(readOnly = true)
 public interface CrudRestaurantRepository extends JpaRepository<Restaurant, Long> {
@@ -17,6 +18,9 @@ public interface CrudRestaurantRepository extends JpaRepository<Restaurant, Long
 
     @Query("SELECT r FROM Restaurant r WHERE r.lastUpdateDate <>:date ORDER BY r.id ASC")
     List<Restaurant> findAllWithoutDate(@Param("date")LocalDate date);
+
+    @Query("SELECT r FROM Restaurant r WHERE r.id =:id AND r.lastUpdateDate =:date")
+    Optional<Restaurant> findByIdByDate(@Param("id")Long id, @Param("date")LocalDate date);
 }
 
 

@@ -26,7 +26,6 @@ public class Meal extends AbstractBaseNamedEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "restaurant_id", nullable = false)
     @JsonBackReference(value = "meal_restaurant_reference")
-    @NotNull
     private Restaurant restaurant;
 
     public Meal() {

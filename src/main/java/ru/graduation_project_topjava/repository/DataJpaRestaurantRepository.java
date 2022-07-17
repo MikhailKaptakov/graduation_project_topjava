@@ -33,6 +33,10 @@ public class DataJpaRestaurantRepository {
         return restaurantRepository.findById(restaurantId).orElse(null);
     }
 
+    public Restaurant findActualById(Long restaurantId) {
+        return restaurantRepository.findByIdByDate(restaurantId, LocalDate.now()).orElse(null);
+    }
+
     public List<Restaurant> getAllNotActual() {
         return restaurantRepository.findAllWithoutDate(LocalDate.now());
     }

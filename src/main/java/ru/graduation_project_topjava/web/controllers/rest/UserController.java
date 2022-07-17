@@ -1,19 +1,16 @@
-package ru.graduation_project_topjava.web.controllers;
+package ru.graduation_project_topjava.web.controllers.rest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ru.graduation_project_topjava.model.Restaurant;
 import ru.graduation_project_topjava.model.Vote;
 import ru.graduation_project_topjava.service.RestaurantService;
-import ru.graduation_project_topjava.service.UserService;
-import ru.graduation_project_topjava.service.VoteService;
-import ru.graduation_project_topjava.web.SecurityUtil;
-//import ru.graduation_project_topjava.web.SecurityUtil;
 
 import java.net.URI;
 import java.util.List;
@@ -31,11 +28,9 @@ public class UserController {
     @Autowired
     private RestaurantService restaurantService;
 
-    @Autowired
-    private VoteService voteService;
-
     @GetMapping()
     public List<Restaurant> getActual() {
+        log.debug("getActual");
         return restaurantService.getAllActual();
     }
 
@@ -43,25 +38,10 @@ public class UserController {
     public ResponseEntity<Vote> vote(@PathVariable long id) {
         Long userId = authUserId();
         log.debug(Long.toString(userId));
-        Vote created = restaurantService.addVote(userId, id);
+        Vote newVote = restaurantService.addVote(userId, id);
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path(REST_URL + "/votes" + "/{id}")
-                .buildAndExpand(created.getId()).toUri();
-        return ResponseEntity.created(uriOfNewResource).body(created);
+                .buildAndExpand(newVote.getId()).toUri();
+        return ResponseEntity.created(uriOfNewResource).body(newVote);
     }
-
-    @GetMapping("/votes" + "/{id}")
-    public Vote getUserVote(@PathVariable long id) {
-        Long userId = authUserId();
-        return voteService.getVote(id, userId);
-    }
-
-
-    //todo добавить валидацию данных
-    //todo добавить обработку ошибок
-    //todo добавить спринг кеш, там где нужно, допустим - получение списка ресторанов
-    //todo придумать как в тесте подменять проверку времени
-    //todo добавить тесты с невалидными данными
-    //todo добавить кеш хибернейта 2-го уровня
-
 }

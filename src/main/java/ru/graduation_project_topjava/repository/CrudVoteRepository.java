@@ -17,5 +17,5 @@ public interface CrudVoteRepository extends JpaRepository<Vote, Long> {
     List<Vote> findAllByDate(@Param("date") LocalDate date);
 
     @Query("SELECT v FROM Vote v WHERE v.user.id =:user_id AND v.voteDate =:date")
-    Optional<Vote> getVote(@Param("user_id") Long userId, @Param("date") LocalDate date);
+    Optional<Vote> getActualUserVote(@Param("user_id") Long userId, @Param("date") LocalDate date);
 }

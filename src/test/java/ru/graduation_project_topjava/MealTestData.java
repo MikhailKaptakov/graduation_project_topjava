@@ -18,6 +18,7 @@ public class MealTestData {
     private static final Meal actualRestaurantActualMeal2 = new Meal("soup", 30000);
     private static final Meal actualRestaurantNotActualMeal3 = new Meal("old soup", 30000);
     private static final Meal actualRestaurantNotActualMeal4 = new Meal("old tea", 5500);
+    private static final Meal actualRestaurant2ActualMeal = new Meal("tea", 500);
 
     private static final Meal newMeal1 = new Meal("first dish", 2000);
     private static final Meal newMeal2 = new Meal("second dish", 5000);
@@ -30,10 +31,12 @@ public class MealTestData {
         actualRestaurantActualMeal2.setId(FIRST_MEAL_ID + 3);
         actualRestaurantNotActualMeal3.setId(FIRST_MEAL_ID + 4);
         actualRestaurantNotActualMeal4.setId(FIRST_MEAL_ID + 5);
+        actualRestaurant2ActualMeal.setId(FIRST_MEAL_ID + 6);
         notActualRestaurantMeal1.setRestaurant(RestaurantTestData.getNotActualRestaurant());
         notActualRestaurantMeal2.setRestaurant(RestaurantTestData.getNotActualRestaurant());
         actualRestaurantActualMeal1.setRestaurant(RestaurantTestData.getActualWithMealsAndVotesRestaurant());
         actualRestaurantActualMeal2.setRestaurant(RestaurantTestData.getActualWithMealsAndVotesRestaurant());
+        actualRestaurant2ActualMeal.setRestaurant(RestaurantTestData.getActualRestaurant2());
         actualRestaurantNotActualMeal3.setRestaurant(RestaurantTestData.getActualWithMealsAndVotesRestaurant());
         actualRestaurantNotActualMeal4.setRestaurant(RestaurantTestData.getActualWithMealsAndVotesRestaurant());
         notActualRestaurantMeal1.setMealDate(AbstractBaseNamedEntity.MIN);
@@ -47,9 +50,13 @@ public class MealTestData {
                 new Meal(actualRestaurantActualMeal2));
     }
 
+    public static List<Meal> getActualRestaurant2ActualMeals() {
+        return List.of(new Meal(actualRestaurant2ActualMeal));
+    }
+
     public static List<Meal> getAllActualMeals() {
         return List.of(new Meal(actualRestaurantActualMeal1),
-                new Meal(actualRestaurantActualMeal2));
+                new Meal(actualRestaurantActualMeal2), new Meal(actualRestaurant2ActualMeal));
     }
 
     public static List<Meal> getNewRestaurantMeals() {

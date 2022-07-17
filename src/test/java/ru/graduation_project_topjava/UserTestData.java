@@ -5,8 +5,8 @@ import ru.graduation_project_topjava.model.User;
 import ru.graduation_project_topjava.model.Vote;
 
 public class UserTestData {
-    public static final MatcherFactory.Matcher<Vote> USER_MATCHER =
-            MatcherFactory.usingIgnoringFieldsComparator(Vote.class);
+    public static final MatcherFactory.Matcher<User> USER_MATCHER =
+            MatcherFactory.usingIgnoringFieldsComparator(User.class, "email", "password");
 
     public static final long USER_ID = 100;
     public static final long ADMIN_ID = 101;

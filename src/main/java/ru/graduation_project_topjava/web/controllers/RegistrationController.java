@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.support.SessionStatus;
+import ru.graduation_project_topjava.View;
 import ru.graduation_project_topjava.model.User;
 import ru.graduation_project_topjava.repository.CrudUserRepository;
 import ru.graduation_project_topjava.service.UserService;
@@ -34,7 +35,7 @@ public class RegistrationController {
     }
 
     @PostMapping
-    public String saveRegister(/*@Validated(View.Web.class) todo*/ UserTo userTo,
+    public String saveRegister(@Validated(View.Web.class) UserTo userTo,
                                                                    BindingResult result,
                                                                    SessionStatus status,
                                                                    ModelMap model) {
@@ -44,7 +45,7 @@ public class RegistrationController {
         }
         create(userTo);
         status.setComplete();
-        return "redirect:/login" /*?message=app.registered&username=" + userTo.getEmail() todo*/;
+        return "redirect:/login";
     }
 
     public User create(UserTo userTo) {

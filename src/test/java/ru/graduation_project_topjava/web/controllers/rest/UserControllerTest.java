@@ -1,4 +1,4 @@
-package ru.graduation_project_topjava.web.controllers;
+package ru.graduation_project_topjava.web.controllers.rest;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,19 +14,16 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;
 import ru.graduation_project_topjava.*;
 import ru.graduation_project_topjava.model.*;
 import ru.graduation_project_topjava.repository.CrudVoteRepository;
-import ru.graduation_project_topjava.service.RestaurantService;
 import ru.graduation_project_topjava.web.json.JsonUtil;
 
 import javax.annotation.PostConstruct;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.List;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
@@ -35,9 +32,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static ru.graduation_project_topjava.TestUtil.userAuth;
-import static ru.graduation_project_topjava.TestUtil.userHttpBasic;
 
-@SpringBootTest
+
+@SpringBootTest(properties = "restaurant.service.maxRevoteTime=23:59:59")
 @Sql(scripts = "classpath:db/populateDB.sql", config = @SqlConfig(encoding = "UTF-8"), executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 @ExtendWith(TimingExtension.class)
 class UserControllerTest {
@@ -82,20 +79,42 @@ class UserControllerTest {
 
     @Test
     void getActual() throws Exception {
-        Restaurant expected = RestaurantTestData.getActualWithMealsAndVotesRestaurant();
+        List<Restaurant> expected = RestaurantTestData.getActualWithMealsAndVotes();
         List<Meal> expectedMeal = MealTestData.getAllActualMeals();
-        List<Vote> expectedVotes = VoteTestData.getActualRestaurant2Votes();
-        expected.setMeals(expectedMeal);
-        expected.setVotes(expectedVotes);
-        perform(MockMvcRequestBuilders.get(REST_URL))
+        List<Vote> expectedVotes = VoteTestData.getActualRestaurantVotes();
+        perform(MockMvcRequestBuilders.get(REST_URL)
+                .with(userAuth(UserTestData.getUser()))
+                .with(csrf().asHeader()))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(RestaurantTestData.RESTAURANT_MATCHER
-                        .contentJson(List.of(expected)));
+                        .contentJson(expected));
     }
 
     @Test
     void vote() throws Exception {
+        User user = UserTestData.getUser2();
+        Restaurant restaurant = RestaurantTestData.getActualRestaurant();
+        Vote expectedVote = new Vote(user, restaurant);
+        expectedVote.setId((long)AbstractBaseEntity.START_SEQ);
+
+        ResultActions action = perform(MockMvcRequestBuilders
+                .post(REST_URL + RestaurantTestData.ACTUAL_RESTAURANT_ID)
+                .contentType(MediaType.APPLICATION_JSON)
+                .with(userAuth(user))
+                .with(csrf().asHeader()))
+                .andDo(print())
+                .andExpect(status().isCreated());
+
+        Vote created = VoteTestData.VOTE_MATCHER.readFromJson(action);
+        VoteTestData.VOTE_MATCHER.assertMatch(created, expectedVote);
+
+        Vote actualVote = voteRepository.getActualUserVote(user.getId(), LocalDate.now()).orElse(null);
+        VoteTestData.VOTE_MATCHER.assertMatch(actualVote, expectedVote);
+    }
+
+    @Test
+    void illegalVoteToNotActualRestaurant() throws Exception {
         User user = UserTestData.getUser2();
         Restaurant restaurant = RestaurantTestData.getNotActualRestaurant();
         Vote expectedVote = new Vote(user, restaurant);
@@ -107,44 +126,42 @@ class UserControllerTest {
                 .with(userAuth(user))
                 .with(csrf().asHeader()))
                 .andDo(print())
-                .andExpect(status().isCreated());
-
-        Vote created = VoteTestData.VOTE_MATCHER.readFromJson(action);
-        VoteTestData.VOTE_MATCHER.assertMatch(created, expectedVote);
-
-        Vote actualVote = voteRepository.getVote(user.getId(), LocalDate.now()).orElse(null);
-        VoteTestData.VOTE_MATCHER.assertMatch(actualVote, expectedVote);
+                .andExpect(status().isUnprocessableEntity());
     }
 
     @Test
     void revote() throws Exception {
         User user = UserTestData.getUser();
-        Restaurant restaurant = RestaurantTestData.getNotActualRestaurant();
+        Restaurant restaurant = RestaurantTestData.getActualRestaurant2();
         Vote expectedVote = new Vote(user, restaurant);
         expectedVote.setId((long)152);
+        ResultActions action = perform(MockMvcRequestBuilders
+                .post(REST_URL + RestaurantTestData.ACTUAL_RESTAURANT2_ID)
+                .contentType(MediaType.APPLICATION_JSON)
+                .with(userAuth(user))
+                .with(csrf().asHeader())
+                .content(JsonUtil.writeValue(expectedVote)))
+                .andExpect(status().isCreated());
 
-        if (LocalTime.now().isAfter(RestaurantService.MAX_REVOTE_TIME)) {
-            ResultActions action = perform(MockMvcRequestBuilders
-                    .post(REST_URL + RestaurantTestData.NOT_ACTUAL_RESTAURANT_ID)
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .with(userAuth(user))
-                    .with(csrf().asHeader()))
-                    .andDo(print())
-                    .andExpect(status().is4xxClientError());
-            //todo исправить исключенние обработкой
-        } else {
-            ResultActions action = perform(MockMvcRequestBuilders
-                    .post(REST_URL+RestaurantTestData.NOT_ACTUAL_RESTAURANT_ID)
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .with(userHttpBasic(UserTestData.getUser()))
-                    .content(JsonUtil.writeValue(expectedVote)))
-                    .andExpect(status().isCreated());
-
-            Vote created = VoteTestData.VOTE_MATCHER.readFromJson(action);
-            VoteTestData.VOTE_MATCHER.assertMatch(created, expectedVote);
-
-            Vote actualVote = voteRepository.getVote(user.getId(), LocalDate.now()).orElse(null);
-            VoteTestData.VOTE_MATCHER.assertMatch(actualVote, expectedVote);
-        }
+        Vote created = VoteTestData.VOTE_MATCHER.readFromJson(action);
+        VoteTestData.VOTE_MATCHER.assertMatch(created, expectedVote);
+        Vote actualVote = voteRepository.getActualUserVote(user.getId(), LocalDate.now()).orElse(null);
+        VoteTestData.VOTE_MATCHER.assertMatch(actualVote, expectedVote);
     }
+
+    @Test
+    void revoteToItself() throws Exception {
+        User user = UserTestData.getUser();
+        Restaurant restaurant = RestaurantTestData.getActualRestaurant();
+        Vote expectedVote = new Vote(user, restaurant);
+        expectedVote.setId((long)152);
+        ResultActions action = perform(MockMvcRequestBuilders
+                .post(REST_URL + RestaurantTestData.ACTUAL_RESTAURANT_ID)
+                .contentType(MediaType.APPLICATION_JSON)
+                .with(userAuth(user))
+                .with(csrf().asHeader())
+                .content(JsonUtil.writeValue(expectedVote)))
+                .andExpect(status().isUnprocessableEntity());
+    }
+
 }

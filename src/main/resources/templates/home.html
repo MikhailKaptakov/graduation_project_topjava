@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<html lang="ru" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <head>
     <meta charset="UTF-8">
     <title>Graduation project</title>
@@ -10,9 +11,12 @@
     <a th:href="@{/register}" class="nav-element this-page">Registration</a>
     <a th:href="@{/login}" class="nav-element this-page">Login</a>
 </nav>
-<form method="POST" th:action="@{/logout}">
-    <input type="submit" value="Logout"/>
-</form>
+<div sec:authorize="isAuthenticated()">
+    <form method="POST" th:action="@{/logout}">
+        <input type="submit" value="Logout"/>
+        <input type="hidden" name="_csrf" th:value="${_csrf.token}"/>
+    </form>
+</div>
 
 </body>
 </html>

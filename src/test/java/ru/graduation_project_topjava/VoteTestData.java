@@ -37,7 +37,7 @@ public class VoteTestData {
         vote2AdminActualRestaurant.setVoteDate(LocalDate.of(2000,10,15));
     }
 
-    public static List<Vote> getActualRestaurant2Votes() {
+    public static List<Vote> getActualRestaurantVotes() {
         return List.of(new Vote(actualVote1UserActualRestaurant),
             new Vote(actualVote1AdminActualRestaurant));
     }
