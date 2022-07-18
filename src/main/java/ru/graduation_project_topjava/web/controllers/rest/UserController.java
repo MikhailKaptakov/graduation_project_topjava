@@ -40,7 +40,7 @@ public class UserController {
         log.debug(Long.toString(userId));
         Vote newVote = restaurantService.addVote(userId, id);
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path(REST_URL + "/votes" + "/{id}")
+                .path(VoteController.REST_URL + "/{id}")
                 .buildAndExpand(newVote.getId()).toUri();
         return ResponseEntity.created(uriOfNewResource).body(newVote);
     }

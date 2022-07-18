@@ -14,7 +14,6 @@ import ru.graduation_project_topjava.web.json.JacksonObjectMapper;
 import java.util.List;
 
 @SpringBootApplication
-@EnableCaching
 public class GraduationProjectTopjavaApplication {
 
     public static void main(String[] args) {

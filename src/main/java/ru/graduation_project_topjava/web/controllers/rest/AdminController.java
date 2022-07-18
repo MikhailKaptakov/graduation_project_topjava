@@ -48,7 +48,7 @@ public class AdminController {
     private ResponseEntity<Restaurant> saveRestaurant(List<Meal> meals, Restaurant restaurant) {
         Restaurant savedRestaurant = restaurantService.createOrUpdateWithMeals(meals, restaurant);
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path(REST_URL + "/{id}")
+                .path(RestaurantController.REST_URL + "/{id}")
                 .buildAndExpand(savedRestaurant.getId()).toUri();
         return ResponseEntity.created(uriOfNewResource).body(savedRestaurant);
     }
