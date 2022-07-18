@@ -11,22 +11,22 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.support.SessionStatus;
 import ru.graduation_project_topjava.View;
 import ru.graduation_project_topjava.model.User;
-import ru.graduation_project_topjava.repository.CrudUserRepository;
 import ru.graduation_project_topjava.service.UserService;
 import ru.graduation_project_topjava.to.UserTo;
 import ru.graduation_project_topjava.util.UserUtil;
 import ru.graduation_project_topjava.util.validation.ValidationUtil;
+import ru.graduation_project_topjava.web.controllers.rest.AdminController;
 
 @Controller
-@RequestMapping("/register")
+@RequestMapping(RegistrationController.URL)
 public class RegistrationController {
 
-    private UserService userService;
-    private PasswordEncoder passwordEncoder;
+    public static final String URL = "/register";
 
-    public RegistrationController(UserService userService, PasswordEncoder passwordEncoder) {
+    private UserService userService;
+
+    public RegistrationController(UserService userService) {
         this.userService = userService;
-        this.passwordEncoder = passwordEncoder;
     }
 
     @GetMapping
