@@ -3,12 +3,23 @@ package ru.graduation_project_topjava.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
+import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.server.SecurityWebFilterChain;
 
 @Configuration
 public class SecurityConfig {
+
+    private static final String[] AUTH_WHITELIST = {
+            "/swagger-resources/**",
+            "/swagger-ui.html",
+            "/v2/api-docs",
+            "/webjars/**",
+            "/javainuse-openapi/**"
+    };
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -22,6 +33,7 @@ public class SecurityConfig {
                 .antMatchers( "/user", "/user/**",
                         "/restaurants", "/restaurants/**", "/votes", "/votes/**").access("isAuthenticated()")
                 .antMatchers("/admin", "/admin/**").hasRole("ADMIN")
+                .antMatchers(AUTH_WHITELIST).permitAll()
                 .antMatchers("/", "/**").permitAll()
                 .and()
                 .formLogin().loginPage("/login")
@@ -33,10 +45,5 @@ public class SecurityConfig {
                 .and()
                 .build();
     }
-
-
-
-
-
 
 }

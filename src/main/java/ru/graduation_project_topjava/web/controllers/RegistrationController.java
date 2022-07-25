@@ -1,6 +1,7 @@
 package ru.graduation_project_topjava.web.controllers;
 
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -15,11 +16,12 @@ import ru.graduation_project_topjava.service.UserService;
 import ru.graduation_project_topjava.to.UserTo;
 import ru.graduation_project_topjava.util.UserUtil;
 import ru.graduation_project_topjava.util.validation.ValidationUtil;
-import ru.graduation_project_topjava.web.controllers.rest.AdminController;
 
 @Controller
 @RequestMapping(RegistrationController.URL)
 public class RegistrationController {
+
+    private static final Logger log = LoggerFactory.getLogger(RegistrationController.class);
 
     public static final String URL = "/register";
 
@@ -43,14 +45,14 @@ public class RegistrationController {
             model.addAttribute("register", true);
             return "registration";
         }
-        create(userTo);
+        User user = create(userTo);
+        log.info("create {}", user);
         status.setComplete();
         return "redirect:/login";
     }
 
     public User create(UserTo userTo) {
-        /*log.info("create {}", userTo);*/
-        //todo добавить логирование во все контроллеры и сервисы
+        log.info("create {}", userTo);
         ValidationUtil.checkNew(userTo);
         return userService.create(UserUtil.createNewFromTo(userTo));
     }

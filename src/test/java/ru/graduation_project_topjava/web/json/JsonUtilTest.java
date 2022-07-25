@@ -1,18 +1,10 @@
 package ru.graduation_project_topjava.web.json;
 
 import org.junit.jupiter.api.Test;
-import ru.graduation_project_topjava.MealTestData;
 import ru.graduation_project_topjava.RestaurantTestData;
-import ru.graduation_project_topjava.UserTestData;
 import ru.graduation_project_topjava.model.Restaurant;
-import ru.graduation_project_topjava.model.User;
 
 import java.util.List;
-
-import static org.hamcrest.CoreMatchers.containsString;
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.MatcherAssert.assertThat;
-
 
 class JsonUtilTest {
 

@@ -127,8 +127,5 @@ class AdminControllerTest extends AbstractRestControllerTest {
                 JsonUtil.writeValue(newMeals), status().isUnprocessableEntity(), UserTestData.getAdmin());
     }
 
-    //todo рефактор тестов контроллеров, добавить абстрактный класс тестовый
     //todo добавить ридми
-    //todo добавить соап юай тесты
-    //todo добавить сваггер
 }

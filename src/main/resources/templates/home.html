@@ -10,6 +10,7 @@
 <nav class="nav">
     <a th:href="@{/register}" class="nav-element this-page">Registration</a>
     <a th:href="@{/login}" class="nav-element this-page">Login</a>
+    <a class="btn btn-lg btn-success my-4" href="swagger-ui.html" target="_blank">Swagger REST Api Documentation</a>
 </nav>
 <div sec:authorize="isAuthenticated()">
     <form method="POST" th:action="@{/logout}">

@@ -22,23 +22,4 @@ class RegistrationControllerTest extends AbstractControllerTest {
                 .andExpect(view().name("registration"));
     }
 
-   /* @Test
-    void saveRegister() throws Exception{
-        UserTo userTo = createUserTo(UserTestData.getUser());
-        perform(post(URL))
-                .andExpect(status().isOk())
-                .andDo(print());
-
-        //todo create REST REGISTRATION CONTROLLER
-        //todo how insert userTo to post in viewController?
-    }
-
-    @Test
-    void invalidSaveRegister() throws Exception{
-        //todo
-    }
-*/
-    private UserTo createUserTo(User user) {
-        return new UserTo(user.getId(), user.getName(), user.getEmail(), user.getPassword());
-    }
 }

@@ -17,6 +17,7 @@
     <properties>
         <java.version>17</java.version>
         <jackson.version>2.13.2</jackson.version>
+        <openApi.version>1.6.4</openApi.version>
         <!--Logging-->
         <logback.version>1.2.11</logback.version>
         <slf4j.version>1.7.35</slf4j.version>
@@ -118,6 +119,13 @@
             <artifactId>jsoup</artifactId>
             <version>1.14.3</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-ui</artifactId>
+            <version>${openApi.version}</version>
+        </dependency>
+
     </dependencies>
 
     <build>
