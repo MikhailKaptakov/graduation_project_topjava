@@ -1,3 +1,5 @@
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/111ab9541ea44fd08798cd7508b4f1c9)](https://www.codacy.com/gh/MikhailKaptakov/graduation_project_topjava/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=MikhailKaptakov/graduation_project_topjava&amp;utm_campaign=Badge_Grade)
+
 
 Graduation TopJava Enterprise Project 
 ===============================
