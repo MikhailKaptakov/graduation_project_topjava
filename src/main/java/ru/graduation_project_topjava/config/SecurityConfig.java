@@ -4,6 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
+import org.springframework.security.config.annotation.web.configurers.CsrfConfigurer;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -16,7 +17,7 @@ public class SecurityConfig {
     private static final String[] AUTH_WHITELIST = {
             "/swagger-resources/**",
             "/swagger-ui.html",
-            "/v2/api-docs",
+            "/v3/api-docs",
             "/webjars/**",
             "/javainuse-openapi/**"
     };
@@ -27,10 +28,10 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception{
+    public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
                 .authorizeRequests()
-                .antMatchers( "/user", "/user/**",
+                .antMatchers("/user", "/user/**",
                         "/restaurants", "/restaurants/**", "/votes", "/votes/**").access("isAuthenticated()")
                 .antMatchers("/admin", "/admin/**").hasRole("ADMIN")
                 .antMatchers(AUTH_WHITELIST).permitAll()
@@ -43,7 +44,10 @@ public class SecurityConfig {
                 .logout()
                 .logoutSuccessUrl("/home")
                 .and()
+                .csrf()
+                .ignoringAntMatchers("/admin/restaurants", "/admin/restaurants/**", "/restaurants/**",
+                        "/user/restaurants", "/user/restaurants/**", "/votes/**")
+                .and()
                 .build();
     }
-
 }

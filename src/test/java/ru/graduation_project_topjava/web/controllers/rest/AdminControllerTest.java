@@ -128,4 +128,7 @@ class AdminControllerTest extends AbstractRestControllerTest {
     }
 
     //todo добавить ридми
+            //todo добавить описание
+    //todo почистить импорты
+    //todo проверить все uri для этого может потребоваться настроить соап юай
 }
