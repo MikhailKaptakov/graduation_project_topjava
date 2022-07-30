@@ -16,8 +16,6 @@ import java.util.List;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-
-
 @SpringBootTest(properties = "restaurant.service.maxRevoteTime=23:59:59")
 class UserControllerTest extends AbstractRestControllerTest {
 

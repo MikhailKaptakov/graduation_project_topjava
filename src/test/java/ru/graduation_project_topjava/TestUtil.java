@@ -7,18 +7,7 @@ import org.springframework.test.web.servlet.request.RequestPostProcessor;
 import ru.graduation_project_topjava.model.User;
 import ru.graduation_project_topjava.web.AuthorizedUser;
 
-import java.util.Locale;
-
 public class TestUtil {
-
-    public static void mockAuthorize(User user) {
-        SecurityContextHolder.getContext().setAuthentication(
-                new UsernamePasswordAuthenticationToken(new AuthorizedUser(user), null, user.getRoles()));
-    }
-
-    public static RequestPostProcessor userHttpBasic(User user) {
-        return SecurityMockMvcRequestPostProcessors.httpBasic(user.getEmail(), user.getPassword());
-    }
 
     public static RequestPostProcessor userAuth(User user) {
         return SecurityMockMvcRequestPostProcessors

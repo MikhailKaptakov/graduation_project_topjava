@@ -1,7 +1,7 @@
 package ru.graduation_project_topjava.model;
 
 import org.hibernate.Hibernate;
-import org.springframework.data.domain.Persistable;
+
 import ru.graduation_project_topjava.HasId;
 
 import javax.persistence.*;

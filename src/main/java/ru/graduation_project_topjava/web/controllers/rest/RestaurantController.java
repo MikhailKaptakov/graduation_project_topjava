@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.graduation_project_topjava.model.Restaurant;
 import ru.graduation_project_topjava.service.RestaurantService;
-import ru.graduation_project_topjava.util.validation.ValidationUtil;
 
 @RestController
 @RequestMapping(value = RestaurantController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)

@@ -1,9 +1,7 @@
 package ru.graduation_project_topjava.service;
 
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.graduation_project_topjava.config.CustomConfigureProperties;

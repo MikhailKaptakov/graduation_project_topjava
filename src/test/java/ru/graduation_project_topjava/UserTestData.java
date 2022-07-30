@@ -2,7 +2,6 @@ package ru.graduation_project_topjava;
 
 import ru.graduation_project_topjava.model.Role;
 import ru.graduation_project_topjava.model.User;
-import ru.graduation_project_topjava.model.Vote;
 
 public class UserTestData {
     public static final MatcherFactory.Matcher<User> USER_MATCHER =

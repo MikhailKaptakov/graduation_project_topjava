@@ -1,11 +1,8 @@
 package ru.graduation_project_topjava.to;
 
-import org.hibernate.validator.constraints.Range;
 import ru.graduation_project_topjava.util.validation.NoHtml;
-
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serial;
 import java.io.Serializable;
